@@ -1,26 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserService } from 'src/user/user.service';
+import { Repository } from 'typeorm';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
+import { Tracker } from './entities/tracker.entity';
 
 @Injectable()
 export class TrackerService {
-  create(createTrackerDto: CreateTrackerDto) {
-    return 'This action adds a new tracker';
+  constructor(
+    @InjectRepository(Tracker)
+    private trackersRepository: Repository<Tracker>,
+    private userService: UserService,
+  ) {}
+
+  async create(createTrackerDto: CreateTrackerDto) {
+    const tracker = new Tracker();
+    tracker.name = createTrackerDto.name;
+
+    const user = await this.userService.findOne(createTrackerDto.userId);
+    tracker.user = user;
+
+    return this.trackersRepository.save(tracker);
   }
 
-  findAll() {
-    return `This action returns all tracker`;
+  findAll(): Promise<Tracker[]> {
+    return this.trackersRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tracker`;
+  findOne(id: number): Promise<Tracker> {
+    return this.trackersRepository.findOneBy({ id });
   }
 
   update(id: number, updateTrackerDto: UpdateTrackerDto) {
-    return `This action updates a #${id} tracker`;
+    return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tracker`;
+  async remove(id: number): Promise<void> {
+    await this.trackersRepository.delete(id);
   }
 }

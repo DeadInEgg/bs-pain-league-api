@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { Tracker } from './tracker/entities/tracker.entity';
 import { TrackerModule } from './tracker/tracker.module';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
@@ -15,7 +16,7 @@ import { UserModule } from './user/user.module';
       username: 'root',
       password: 'superuser123',
       database: 'user',
-      entities: [User],
+      entities: [User, Tracker],
       synchronize: true,
     }),
     TrackerModule,
