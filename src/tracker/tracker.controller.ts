@@ -25,6 +25,11 @@ export class TrackerController {
     return this.trackerService.findAll();
   }
 
+  @Get('user/:id')
+  findTrackersByUserId(@Param('id') id: string) {
+    return this.trackerService.findByUserId(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.trackerService.findOne(+id);

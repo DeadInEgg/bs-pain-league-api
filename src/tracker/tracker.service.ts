@@ -28,12 +28,26 @@ export class TrackerService {
     return this.trackersRepository.find();
   }
 
-  findOne(id: number): Promise<Tracker> {
-    return this.trackersRepository.findOneBy({ id });
+  async findOne(id: number): Promise<Tracker> {
+    return await this.trackersRepository.findOneBy({ id });
   }
 
-  update(id: number, updateTrackerDto: UpdateTrackerDto) {
-    return `This action updates a #${id} user`;
+  async findByUserId(id: number): Promise<Tracker[]> {
+    return await this.trackersRepository.findBy({
+      user: {
+        id: id,
+      },
+    });
+  }
+
+  async update(
+    id: number,
+    updateTrackerDto: UpdateTrackerDto,
+  ): Promise<Tracker> {
+    const tracker = await this.findOne(id);
+    const updated = { ...tracker, ...updateTrackerDto };
+
+    return await this.trackersRepository.save(updated);
   }
 
   async remove(id: number): Promise<void> {
