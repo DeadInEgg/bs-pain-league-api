@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
@@ -11,16 +11,12 @@ export class TrackerService {
   constructor(
     @InjectRepository(Tracker)
     private trackersRepository: Repository<Tracker>,
-    private userService: UserService,
   ) {}
 
-  async create(createTrackerDto: CreateTrackerDto) {
+  async create(createTrackerDto: CreateTrackerDto, user?: User) {
     const tracker = new Tracker();
     tracker.name = createTrackerDto.name;
-
-    const user = await this.userService.findOne(createTrackerDto.userId);
-    tracker.user = user;
-
+    if (user) tracker.user = user;
     return this.trackersRepository.save(tracker);
   }
 
