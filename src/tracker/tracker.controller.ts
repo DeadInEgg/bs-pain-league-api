@@ -20,13 +20,14 @@ export class TrackerController {
     return this.trackerService.create(createTrackerDto);
   }
 
-  @Get()
-  findAll() {
-    return this.trackerService.findAll();
-  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.trackerService.findOne(+id);
+  }
+
+  @Get(':hash')
+  findByHash(@Param('hash') hash: string) {
+    return this.trackerService.findByHash(hash);
   }
 
   @Patch(':id')

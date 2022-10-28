@@ -20,10 +20,6 @@ export class TrackerService {
     return this.trackersRepository.save(tracker);
   }
 
-  findAll(): Promise<Tracker[]> {
-    return this.trackersRepository.find();
-  }
-
   async findOne(id: number): Promise<Tracker> {
     return await this.trackersRepository.findOneBy({ id });
   }
@@ -34,6 +30,10 @@ export class TrackerService {
         id: id,
       },
     });
+  }
+
+  async findByHash(hash: string): Promise<Tracker> {
+    return await this.trackersRepository.findOneBy({ hash });
   }
 
   async update(

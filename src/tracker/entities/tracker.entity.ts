@@ -9,6 +9,12 @@ export class Tracker {
   @Column()
   name: string;
 
+  @Column()
+  tag: string;
+
+  @Column()
+  hash: string;
+
   @ManyToOne((type) => User, (user) => user.id)
   user: User;
 }

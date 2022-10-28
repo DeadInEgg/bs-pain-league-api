@@ -1,5 +1,6 @@
 export class CreateTrackerDto {
   name: string;
-  position: number;
-  userId: number;
+  tag?: string;
+  hash?: string;
+  userId?: number;
 }

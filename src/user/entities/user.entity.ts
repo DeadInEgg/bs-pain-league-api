@@ -7,7 +7,13 @@ export class User {
   id: number;
 
   @Column()
-  pseudo: string;
+  username: string;
+
+  @Column()
+  mail: string;
+
+  @Column()
+  password: string;
 
   @OneToMany((type) => Tracker, (tracker) => tracker.id)
   trackers: Tracker[];

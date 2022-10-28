@@ -14,13 +14,11 @@ export class UserService {
 
   create(createUserDto: CreateUserDto) {
     const user = new User();
-    user.pseudo = createUserDto.pseudo;
+    user.username = createUserDto.username;
+    user.mail = createUserDto.mail;
+    user.password = createUserDto.password;
 
     return this.usersRepository.save(user);
-  }
-
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
   }
 
   findOne(id: number): Promise<User> {
