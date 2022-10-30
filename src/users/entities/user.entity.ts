@@ -1,4 +1,4 @@
-import { Tracker } from 'src/tracker/entities/tracker.entity';
+import { Tracker } from 'src/trackers/entities/tracker.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
 import { Tracker } from './entities/tracker.entity';
 
 @Injectable()
-export class TrackerService {
+export class TrackersService {
   constructor(
     @InjectRepository(Tracker)
     private trackersRepository: Repository<Tracker>,
@@ -37,16 +37,16 @@ export class TrackerService {
   }
 
   async update(
-    id: number,
+    hash: string,
     updateTrackerDto: UpdateTrackerDto,
   ): Promise<Tracker> {
-    const tracker = await this.findOne(id);
+    const tracker = await this.findByHash(hash);
     const updated = { ...tracker, ...updateTrackerDto };
 
     return await this.trackersRepository.save(updated);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.trackersRepository.delete(id);
+  async remove(hash: string): Promise<void> {
+    await this.trackersRepository.delete(hash);
   }
 }

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Tracker } from './tracker/entities/tracker.entity';
-import { TrackerModule } from './tracker/tracker.module';
-import { User } from './user/entities/user.entity';
-import { UserModule } from './user/user.module';
+import { Tracker } from './trackers/entities/tracker.entity';
+import { TrackersModule } from './trackers/trackers.module';
+import { User } from './users/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,8 +19,8 @@ import { UserModule } from './user/user.module';
       entities: [User, Tracker],
       synchronize: true,
     }),
-    TrackerModule,
-    UserModule,
+    TrackersModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
