@@ -1,6 +1,10 @@
+import { IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+
 export class CreateTrackerDto {
+  @IsNotEmpty()
+  @MinLength(4)
   name: string;
-  tag?: string;
-  hash?: string;
-  userId?: number;
+
+  @IsOptional()
+  tag: string;
 }

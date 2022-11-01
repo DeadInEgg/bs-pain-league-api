@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -16,7 +16,12 @@ export class TrackersService {
   async create(createTrackerDto: CreateTrackerDto, user?: User) {
     const tracker = new Tracker();
     tracker.name = createTrackerDto.name;
-    if (user) tracker.user = user;
+    if (tracker.tag) tracker.tag = createTrackerDto.tag;
+    if (user) {
+      tracker.user = user;
+    } else {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
     return this.trackersRepository.save(tracker);
   }
 
@@ -41,12 +46,13 @@ export class TrackersService {
     updateTrackerDto: UpdateTrackerDto,
   ): Promise<Tracker> {
     const tracker = await this.findByHash(hash);
-    const updated = { ...tracker, ...updateTrackerDto };
-
-    return await this.trackersRepository.save(updated);
+    if (updateTrackerDto.name) tracker.name = updateTrackerDto.name;
+    if (updateTrackerDto.tag) tracker.tag = updateTrackerDto.tag;
+    return await this.trackersRepository.save(tracker);
   }
 
   async remove(hash: string): Promise<void> {
-    await this.trackersRepository.delete(hash);
+    const tracker = await this.findByHash(hash);
+    await this.trackersRepository.delete(tracker.id);
   }
 }
