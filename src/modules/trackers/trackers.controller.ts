@@ -12,7 +12,9 @@ import { TrackersService } from './trackers.service';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
 import { UsersService } from 'src/modules/users/users.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Trackers')
 @Controller('trackers')
 export class TrackersController {
   constructor(
