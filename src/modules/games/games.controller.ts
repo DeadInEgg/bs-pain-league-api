@@ -21,8 +21,8 @@ export class GamesController {
   }
 
   @Get('suggest/:tag')
-  findSuggest() {
-    return this.gamesService.findSuggest();
+  findSuggest(@Param('tag') tag: string) {
+    return this.gamesService.findSuggest(tag);
   }
 
   @Get(':id')

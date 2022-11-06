@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrackersService } from 'src/modules/trackers/trackers.service';
+import { map } from 'rxjs';
 import { Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
@@ -45,10 +46,10 @@ export class GamesService {
     return this.gamesRepository.save(game);
   }
 
-  findSuggest() {
-    return this.httpService.get(
-      'https://api.brawlstars.com/v1/players/%23JGCCGY80/battlelog',
-    );
+  findSuggest(tag: string) {
+    return this.httpService
+      .get(`/players/%23${tag}/battlelog`)
+      .pipe(map((response) => response.data));
   }
 
   findOneById(id: number) {
