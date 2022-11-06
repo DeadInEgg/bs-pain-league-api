@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
@@ -13,19 +13,16 @@ export class TrackersService {
     private trackersRepository: Repository<Tracker>,
   ) {}
 
-  async create(createTrackerDto: CreateTrackerDto, user?: User) {
-    const tracker = new Tracker();
-    tracker.name = createTrackerDto.name;
-    if (tracker.tag) tracker.tag = createTrackerDto.tag;
-    if (user) {
-      tracker.user = user;
-    } else {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+  async create(createTrackerDto: CreateTrackerDto, user: User) {
+    const tracker = this.trackersRepository.create({
+      ...createTrackerDto,
+      user,
+    });
+
     return this.trackersRepository.save(tracker);
   }
 
-  async findOne(id: number): Promise<Tracker> {
+  async findOneById(id: number): Promise<Tracker> {
     return await this.trackersRepository.findOneBy({ id });
   }
 
@@ -37,7 +34,7 @@ export class TrackersService {
     });
   }
 
-  async findByHash(hash: string): Promise<Tracker> {
+  async findOneByHash(hash: string): Promise<Tracker> {
     return await this.trackersRepository.findOneBy({ hash });
   }
 
@@ -45,14 +42,24 @@ export class TrackersService {
     hash: string,
     updateTrackerDto: UpdateTrackerDto,
   ): Promise<Tracker> {
-    const tracker = await this.findByHash(hash);
-    if (updateTrackerDto.name) tracker.name = updateTrackerDto.name;
-    if (updateTrackerDto.tag) tracker.tag = updateTrackerDto.tag;
-    return await this.trackersRepository.save(tracker);
+    const tracker = await this.findOneByHash(hash);
+
+    if (!tracker) {
+      throw new HttpException(
+        'Tracker not found',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return await this.trackersRepository.save({
+      ...tracker,
+      ...updateTrackerDto,
+    });
   }
 
-  async remove(hash: string): Promise<void> {
-    const tracker = await this.findByHash(hash);
-    await this.trackersRepository.delete(tracker.id);
+  async remove(hash: string): Promise<Tracker> {
+    const tracker = await this.findOneByHash(hash);
+
+    return await this.trackersRepository.remove(tracker);
   }
 }

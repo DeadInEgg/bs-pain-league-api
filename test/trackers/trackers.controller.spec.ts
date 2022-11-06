@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TrackersController } from '../../src/trackers/trackers.controller';
-import { TrackersService } from '../../src/trackers/trackers.service';
+import { TrackersController } from '../../src/modules/trackers/trackers.controller';
+import { TrackersService } from '../../src/modules/trackers/trackers.service';
 
 describe('TrackerController', () => {
   let controller: TrackersController;

@@ -3,7 +3,7 @@ import { TrackersService } from './trackers.service';
 import { TrackersController } from './trackers.controller';
 import { Tracker } from './entities/tracker.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from 'src/modules/users/users.module';
 
 @Module({
   imports: [UsersModule, TypeOrmModule.forFeature([Tracker])],
