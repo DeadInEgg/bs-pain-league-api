@@ -9,9 +9,6 @@ export class Map {
   @Column()
   name: string;
 
-  @Column()
-  url: string;
-
   @OneToMany(() => Game, (game) => game.id)
   games: Game[];
 }
