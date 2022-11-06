@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,31 +14,32 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const user = new User();
-    user.username = createUserDto.username;
-    user.mail = createUserDto.mail;
     const hash = bcrypt.hashSync(createUserDto.password, 10);
-    user.password = hash;
-
+    createUserDto.password = hash;
+    const user = this.usersRepository.create(createUserDto);
     return this.usersRepository.save(user);
   }
 
-  findOne(id: number): Promise<User> {
-    return this.usersRepository.findOneByOrFail({ id });
+  findOneById(id: number): Promise<User> {
+    return this.usersRepository.findOneBy({ id });
   }
 
-  findByMail(mail: string): Promise<User> {
-    return this.usersRepository.findOneByOrFail({ mail });
+  findOneByMail(mail: string): Promise<User> {
+    return this.usersRepository.findOneBy({ mail });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
-    if (updateUserDto.mail) user.mail = updateUserDto.mail;
-    if (updateUserDto.password) user.password = updateUserDto.password;
-    return await this.usersRepository.save(user);
+    const user = await this.findOneById(id);
+    if (!user)
+      throw new HttpException(
+        'User not found',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    return await this.usersRepository.save({ ...user, ...updateUserDto });
   }
 
-  async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+  async remove(id: number): Promise<User> {
+    const user = await this.findOneById(id);
+    return await this.usersRepository.remove(user);
   }
 }

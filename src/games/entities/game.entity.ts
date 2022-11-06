@@ -1,3 +1,4 @@
+import { Tracker } from 'src/trackers/entities/tracker.entity';
 import {
   Column,
   CreateDateColumn,
@@ -17,14 +18,16 @@ export class Game {
   @Column({ type: 'boolean' })
   win: boolean;
 
-  @Column({ type: 'boolean' })
-  loose: boolean;
-
   @ManyToOne(() => Map, (map) => map.id)
   map: Map;
 
   @ManyToOne(() => Mode, (mode) => mode.id)
   mode: Mode;
+
+  @ManyToOne(() => Tracker, (tracker) => tracker.id, {
+    onDelete: 'CASCADE',
+  })
+  tracker: Tracker;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TrackersService } from 'src/trackers/trackers.service';
 import { Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
@@ -12,6 +13,7 @@ import { Mode } from './entities/mode.entity';
 export class GamesService {
   constructor(
     private readonly httpService: HttpService,
+    private readonly trackerService: TrackersService,
 
     @InjectRepository(Game)
     private gamesRepository: Repository<Game>,
@@ -32,12 +34,17 @@ export class GamesService {
       id: createGameDto.modeId,
     });
 
-    const game = new Game();
-    game.win = createGameDto.win;
-    game.mode = mode;
-    game.map = map;
+    const tracker = await this.trackerService.findOneById(
+      createGameDto.trackerId,
+    );
 
-    return this.gamesRepository.create(game);
+    const game = this.gamesRepository.create({
+      ...createGameDto,
+      map,
+      mode,
+      tracker,
+    });
+    return this.gamesRepository.save(game);
   }
 
   findSuggest() {
@@ -46,30 +53,39 @@ export class GamesService {
     );
   }
 
-  findOne(id: number) {
+  findOneById(id: number) {
     return this.gamesRepository.findOneBy({ id });
   }
 
   async update(id: number, updateGameDto: UpdateGameDto) {
-    const game = await this.findOne(id);
-    if (updateGameDto.win) game.win = updateGameDto.win;
+    const game = await this.findOneById(id);
+    if (!game)
+      throw new HttpException(
+        'Game not found',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+
     if (updateGameDto.mapId) {
-      const map = await this.mapsRepository.findOneBy({
+      game.map = await this.mapsRepository.findOneBy({
         id: updateGameDto.mapId,
       });
-      game.map = map;
     }
     if (updateGameDto.modeId) {
-      const mode = await this.modesRepository.findOneBy({
+      game.mode = await this.modesRepository.findOneBy({
         id: updateGameDto.modeId,
       });
-      game.mode = mode;
+    }
+    if (updateGameDto.trackerId) {
+      game.tracker = await this.trackerService.findOneById(
+        updateGameDto.trackerId,
+      );
     }
 
-    return this.gamesRepository.save(game);
+    return this.gamesRepository.save({ ...game, ...updateGameDto });
   }
 
   async remove(id: number) {
-    return this.gamesRepository.delete(id);
+    const game = await this.findOneById(id);
+    return this.gamesRepository.remove(game);
   }
 }

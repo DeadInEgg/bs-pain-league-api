@@ -9,4 +9,7 @@ export class CreateGameDto {
 
   @IsNotEmpty()
   modeId: number;
+
+  @IsNotEmpty()
+  trackerId: number;
 }

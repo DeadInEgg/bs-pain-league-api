@@ -22,7 +22,7 @@ export class TrackersController {
 
   @Post()
   async create(@Req() request, @Body() createTrackerDto: CreateTrackerDto) {
-    const user = await this.usersService.findByMail(request.user.mail);
+    const user = await this.usersService.findOneByMail(request.user.mail);
     return this.trackersService.create(createTrackerDto, user);
   }
 
@@ -33,7 +33,7 @@ export class TrackersController {
 
   @Get(':hash')
   findByHash(@Param('hash') hash: string) {
-    return this.trackersService.findByHash(hash);
+    return this.trackersService.findOnByHash(hash);
   }
 
   @Get(':hash/games')

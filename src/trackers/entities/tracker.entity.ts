@@ -1,3 +1,4 @@
+import { Game } from 'src/games/entities/game.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -5,6 +6,7 @@ import {
   Entity,
   Generated,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,6 +30,9 @@ export class Tracker {
     onDelete: 'CASCADE',
   })
   user: User;
+
+  @OneToMany(() => Game, (game) => game.id)
+  games: Game[];
 
   @CreateDateColumn({
     type: 'timestamp',
