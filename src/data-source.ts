@@ -13,7 +13,7 @@ export const dataSourceOptions: DataSourceOptions = {
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_DATABASE'),
   entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/db/migrations/*.js'],
+  migrations: ['dist/migrations/*.js'],
 };
 
 const dataSource = new DataSource(dataSourceOptions);

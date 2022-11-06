@@ -17,6 +17,7 @@ export class UsersService {
     const hash = bcrypt.hashSync(createUserDto.password, 10);
     createUserDto.password = hash;
     const user = this.usersRepository.create(createUserDto);
+
     return this.usersRepository.save(user);
   }
 
@@ -30,16 +31,20 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOneById(id);
-    if (!user)
+
+    if (!user) {
       throw new HttpException(
         'User not found',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+
     return await this.usersRepository.save({ ...user, ...updateUserDto });
   }
 
   async remove(id: number): Promise<User> {
     const user = await this.findOneById(id);
+
     return await this.usersRepository.remove(user);
   }
 }

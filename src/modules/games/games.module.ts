@@ -7,7 +7,7 @@ import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
 import { Type } from './entities/type.entity';
-import { TrackersModule } from 'src/trackers/trackers.module';
+import { TrackersModule } from 'src/modules/trackers/trackers.module';
 
 @Module({
   imports: [

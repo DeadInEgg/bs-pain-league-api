@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TrackersService } from 'src/trackers/trackers.service';
+import { TrackersService } from 'src/modules/trackers/trackers.service';
 import { Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
@@ -29,21 +29,19 @@ export class GamesService {
     const map = await this.mapsRepository.findOneBy({
       id: createGameDto.mapId,
     });
-
     const mode = await this.modesRepository.findOneBy({
       id: createGameDto.modeId,
     });
-
     const tracker = await this.trackerService.findOneById(
       createGameDto.trackerId,
     );
-
     const game = this.gamesRepository.create({
       ...createGameDto,
       map,
       mode,
       tracker,
     });
+
     return this.gamesRepository.save(game);
   }
 
@@ -59,22 +57,26 @@ export class GamesService {
 
   async update(id: number, updateGameDto: UpdateGameDto) {
     const game = await this.findOneById(id);
-    if (!game)
+
+    if (!game) {
       throw new HttpException(
         'Game not found',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
 
     if (updateGameDto.mapId) {
       game.map = await this.mapsRepository.findOneBy({
         id: updateGameDto.mapId,
       });
     }
+
     if (updateGameDto.modeId) {
       game.mode = await this.modesRepository.findOneBy({
         id: updateGameDto.modeId,
       });
     }
+
     if (updateGameDto.trackerId) {
       game.tracker = await this.trackerService.findOneById(
         updateGameDto.trackerId,
@@ -86,6 +88,7 @@ export class GamesService {
 
   async remove(id: number) {
     const game = await this.findOneById(id);
+
     return this.gamesRepository.remove(game);
   }
 }

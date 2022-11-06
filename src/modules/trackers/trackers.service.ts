@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
@@ -18,6 +18,7 @@ export class TrackersService {
       ...createTrackerDto,
       user,
     });
+
     return this.trackersRepository.save(tracker);
   }
 
@@ -33,7 +34,7 @@ export class TrackersService {
     });
   }
 
-  async findOnByHash(hash: string): Promise<Tracker> {
+  async findOneByHash(hash: string): Promise<Tracker> {
     return await this.trackersRepository.findOneBy({ hash });
   }
 
@@ -41,12 +42,15 @@ export class TrackersService {
     hash: string,
     updateTrackerDto: UpdateTrackerDto,
   ): Promise<Tracker> {
-    const tracker = await this.findOnByHash(hash);
-    if (!tracker)
+    const tracker = await this.findOneByHash(hash);
+
+    if (!tracker) {
       throw new HttpException(
         'Tracker not found',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+
     return await this.trackersRepository.save({
       ...tracker,
       ...updateTrackerDto,
@@ -54,7 +58,8 @@ export class TrackersService {
   }
 
   async remove(hash: string): Promise<Tracker> {
-    const tracker = await this.findOnByHash(hash);
+    const tracker = await this.findOneByHash(hash);
+
     return await this.trackersRepository.remove(tracker);
   }
 }
