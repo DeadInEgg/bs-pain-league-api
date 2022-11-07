@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,35 +11,54 @@ import {
 import { Map } from './map.entity';
 import { Mode } from './mode.entity';
 
+export enum GameResult {
+  VICTORY = 'victory',
+  DRAW = 'draw',
+  DEFEAT = 'defeat',
+}
+
 @Entity()
 export class Game {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  result: string;
+  @Column({
+    type: 'enum',
+    enum: GameResult,
+  })
+  result: GameResult;
 
-  @ManyToOne(() => Map, (map) => map.id)
+  @ManyToOne(() => Map, (map) => map.games, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'map_id' })
   map: Map;
 
-  @ManyToOne(() => Mode, (mode) => mode.id)
+  @ManyToOne(() => Mode, (mode) => mode.games, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'mode_id' })
   mode: Mode;
 
-  @ManyToOne(() => Tracker, (tracker) => tracker.id, {
+  @ManyToOne(() => Tracker, (tracker) => tracker.games, {
+    nullable: false,
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'tracker_id' })
   tracker: Tracker;
 
   @CreateDateColumn({
+    name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  public created_at: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  public updated_at: Date;
+  public updatedAt: Date;
 }

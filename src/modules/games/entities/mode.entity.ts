@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -16,9 +17,10 @@ export class Mode {
   @Column()
   name: string;
 
-  @ManyToOne(() => Type, (type) => type.id)
+  @ManyToOne(() => Type)
+  @JoinColumn({ name: 'type_id' })
   type: Type;
 
-  @OneToMany(() => Game, (game) => game.id)
+  @OneToMany(() => Game, (game) => game.mode)
   games: Game[];
 }

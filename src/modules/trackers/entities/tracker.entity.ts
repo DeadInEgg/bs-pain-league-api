@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -26,24 +27,28 @@ export class Tracker {
   @Generated('uuid')
   hash: string;
 
-  @ManyToOne((type) => User, (user) => user.id, {
+  @ManyToOne(() => User, (user) => user.trackers, {
+    nullable: false,
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => Game, (game) => game.id)
+  @OneToMany(() => Game, (game) => game.tracker)
   games: Game[];
 
   @CreateDateColumn({
+    name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  public created_at: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  public updated_at: Date;
+  public updatedAt: Date;
 }

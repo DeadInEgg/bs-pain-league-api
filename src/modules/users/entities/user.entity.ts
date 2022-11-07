@@ -22,19 +22,21 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany((type) => Tracker, (tracker) => tracker.id)
+  @OneToMany(() => Tracker, (tracker) => tracker.user)
   trackers: Tracker[];
 
   @CreateDateColumn({
+    name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  public created_at: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
-  public updated_at: Date;
+  public updatedAt: Date;
 }

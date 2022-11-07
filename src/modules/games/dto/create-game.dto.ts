@@ -1,8 +1,9 @@
 import { IsNotEmpty } from 'class-validator';
+import { GameResult } from '../entities/game.entity';
 
 export class CreateGameDto {
   @IsNotEmpty()
-  result: string;
+  result: GameResult;
 
   @IsNotEmpty()
   mapId: number;

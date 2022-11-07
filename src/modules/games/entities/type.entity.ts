@@ -9,6 +9,6 @@ export class Type {
   @Column()
   name: string;
 
-  @OneToMany(() => Mode, (mode) => mode.id)
+  @OneToMany(() => Mode, (mode) => mode.games)
   games: Mode[];
 }

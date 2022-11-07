@@ -1,5 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Game } from './game.entity';
+import { Mode } from './mode.entity';
 
 @Entity()
 export class Map {
@@ -11,4 +19,16 @@ export class Map {
 
   @OneToMany(() => Game, (game) => game.id)
   games: Game[];
+
+  @ManyToMany(() => Mode, (mode) => mode.id)
+  @JoinTable({
+    name: 'maps_modes',
+    joinColumn: {
+      name: 'map_id',
+    },
+    inverseJoinColumn: {
+      name: 'mode_id',
+    },
+  })
+  modes: Mode[];
 }
