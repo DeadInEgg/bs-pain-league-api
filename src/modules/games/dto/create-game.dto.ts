@@ -2,7 +2,7 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateGameDto {
   @IsNotEmpty()
-  win: boolean;
+  result: string;
 
   @IsNotEmpty()
   mapId: number;

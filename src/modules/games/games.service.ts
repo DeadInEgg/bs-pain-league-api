@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrackersService } from 'src/modules/trackers/trackers.service';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
@@ -26,6 +26,30 @@ export class GamesService {
     private modesRepository: Repository<Mode>,
   ) {}
 
+  async parseOnGames(response: any): Promise<Game[]> {
+    const games: Game[] = [];
+
+    await Promise.all(
+      response.items.map(async (item) => {
+        const game = new Game();
+
+        game.map = await this.mapsRepository.findOneBy({
+          name: item.event.map,
+        });
+        game.mode = await this.modesRepository.findOneBy({
+          name: item.event.mode,
+        });
+        game.result = item.battle.result;
+
+        if (game.mode && game.map) {
+          games.push(game);
+        }
+      }),
+    );
+
+    return games;
+  }
+
   async create(createGameDto: CreateGameDto) {
     const map = await this.mapsRepository.findOneBy({
       id: createGameDto.mapId,
@@ -46,10 +70,12 @@ export class GamesService {
     return this.gamesRepository.save(game);
   }
 
-  findSuggest(tag: string) {
-    return this.httpService
-      .get(`/players/%23${tag}/battlelog`)
-      .pipe(map((response) => response.data));
+  async findSuggest(tag: string): Promise<Game[]> {
+    return await firstValueFrom(
+      this.httpService
+        .get(`/players/%23${tag}/battlelog`)
+        .pipe(map((response) => this.parseOnGames(response.data))),
+    );
   }
 
   findOneById(id: number) {
