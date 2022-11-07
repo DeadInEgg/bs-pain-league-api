@@ -8,11 +8,21 @@ import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
 import { Type } from './entities/type.entity';
 import { TrackersModule } from 'src/modules/trackers/trackers.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    HttpModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        baseURL: configService.get('API_BS_URL'),
+        headers: {
+          Authorization: `Bearer ${configService.get('API_BS_TOKEN')}`,
+        },
+      }),
+      inject: [ConfigService],
+    }),
     TrackersModule,
-    HttpModule,
     TypeOrmModule.forFeature([Game, Map, Mode, Type]),
   ],
   controllers: [GamesController],
