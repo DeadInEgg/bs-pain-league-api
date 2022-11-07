@@ -15,8 +15,8 @@ export class Game {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'boolean' })
-  win: boolean;
+  @Column()
+  result: string;
 
   @ManyToOne(() => Map, (map) => map.id)
   map: Map;
