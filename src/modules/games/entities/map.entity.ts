@@ -17,7 +17,7 @@ export class Map {
   @Column()
   name: string;
 
-  @OneToMany(() => Game, (game) => game.id)
+  @OneToMany(() => Game, (game) => game.map)
   games: Game[];
 
   @ManyToMany(() => Mode, (mode) => mode.id)

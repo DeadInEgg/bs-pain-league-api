@@ -79,7 +79,7 @@ export class GamesService {
   }
 
   findOneById(id: number) {
-    return this.gamesRepository.findOneBy({ id });
+    return this.gamesRepository.findOne({where: {id: id}, relations: {tracker: true}});
   }
 
   async update(id: number, updateGameDto: UpdateGameDto) {

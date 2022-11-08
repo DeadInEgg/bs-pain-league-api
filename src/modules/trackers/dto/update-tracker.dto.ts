@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { CreateTrackerDto } from './create-tracker.dto';
 
 export class UpdateTrackerDto extends PartialType(CreateTrackerDto) {}

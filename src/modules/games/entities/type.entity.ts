@@ -10,5 +10,5 @@ export class Type {
   name: string;
 
   @OneToMany(() => Mode, (mode) => mode.games)
-  games: Mode[];
+  modes: Mode[];
 }

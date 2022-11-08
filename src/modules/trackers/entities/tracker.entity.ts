@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Game } from 'src/modules/games/entities/game.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import {
@@ -11,6 +12,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ApiHideProperty } from "@nestjs/swagger";
 
 @Entity()
 export class Tracker {
@@ -20,6 +22,9 @@ export class Tracker {
   @Column()
   name: string;
 
+  /**
+   * Player's id in brawl star app
+   */
   @Column({ nullable: true })
   tag?: string;
 
@@ -27,6 +32,8 @@ export class Tracker {
   @Generated('uuid')
   hash: string;
 
+  @ApiHideProperty()
+  @Exclude()
   @ManyToOne(() => User, (user) => user.trackers, {
     nullable: false,
     onDelete: 'CASCADE',
@@ -51,4 +58,8 @@ export class Tracker {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updatedAt: Date;
+
+  constructor(partial: Partial<Tracker>) {
+    Object.assign(this, partial);
+  }
 }

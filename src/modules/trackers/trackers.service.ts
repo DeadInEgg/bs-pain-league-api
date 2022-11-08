@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -27,39 +27,54 @@ export class TrackersService {
   }
 
   async findByUserId(id: number): Promise<Tracker[]> {
-    return await this.trackersRepository.findBy({
-      user: {
-        id: id,
+    return await this.trackersRepository.find({
+        where: {
+          user: {
+            id
+          }
+        }
+      });
+  }
+
+  async findOneByHashAndUserIdWithGames(hash: string, userId: number): Promise<Tracker> {
+    return await this.trackersRepository.findOne({
+      where: {
+        hash,
+        user: {
+          id: userId
+        }
       },
+      relations: {
+        games: {
+          mode: true,
+          map: true,
+        }
+      }
     });
   }
 
-  async findOneByHash(hash: string): Promise<Tracker> {
-    return await this.trackersRepository.findOneBy({ hash });
+  async findOneByHashAndUser(hash: string, userId: number): Promise<Tracker> {
+    return await this.trackersRepository.findOne({
+      where: {
+        hash,
+        user: {
+          id: userId
+        }
+      }
+    });
   }
 
   async update(
-    hash: string,
+    tracker: Tracker,
     updateTrackerDto: UpdateTrackerDto,
   ): Promise<Tracker> {
-    const tracker = await this.findOneByHash(hash);
-
-    if (!tracker) {
-      throw new HttpException(
-        'Tracker not found',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-
     return await this.trackersRepository.save({
       ...tracker,
       ...updateTrackerDto,
     });
   }
 
-  async remove(hash: string): Promise<Tracker> {
-    const tracker = await this.findOneByHash(hash);
-
+  async remove(tracker: Tracker): Promise<Tracker> {
     return await this.trackersRepository.remove(tracker);
   }
 }
