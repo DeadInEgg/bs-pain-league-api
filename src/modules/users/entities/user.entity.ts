@@ -1,4 +1,5 @@
 import { Tracker } from 'src/modules/trackers/entities/tracker.entity';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -13,6 +14,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column()
   username: string;
 
