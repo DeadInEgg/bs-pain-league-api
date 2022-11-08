@@ -71,7 +71,7 @@ export class TrackersController {
     const tracker = await this.trackersService.findOneByHashAndUser(hash, request.user.id);
 
     if (null === tracker) {
-      throw new HttpException('tracker not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
     }
 
     return this.trackersService.update(tracker, updateTrackerDto);
@@ -84,7 +84,7 @@ export class TrackersController {
     const tracker = await this.trackersService.findOneByHashAndUser(hash, request.user.id);
 
     if (null === tracker) {
-      throw new HttpException('tracker not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
     }
 
     return this.trackersService.remove(tracker);
