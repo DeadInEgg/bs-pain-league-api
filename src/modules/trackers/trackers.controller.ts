@@ -27,8 +27,8 @@ export class TrackersController {
     private readonly usersService: UsersService,
   ) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: "Create a tracker for the current logged user" })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   async create(@Req() request, @Body() createTrackerDto: CreateTrackerDto) {
     const user = await this.usersService.findOneByMail(request.user.mail);
@@ -40,15 +40,15 @@ export class TrackersController {
     return this.trackersService.create(createTrackerDto, user);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({ summary: "Get a list of trackers for the current logged user" })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findByCurrentUser(@Req() request) {
     return this.trackersService.findByUserId(request.user.id);
   }
 
-  @ApiNotFoundResponse({ description: "Tracker not found" })
   @ApiOperation({ summary: "Get tracker's infos" })
+  @ApiNotFoundResponse({ description: "Tracker not found" })
   @Get(':hash')
   async findByHash(@Param('hash') hash: string, @Req() request) {
     const tracker = await this.trackersService.findOneByHashAndUserIdWithGames(hash, request.user.id);
@@ -60,8 +60,8 @@ export class TrackersController {
     return tracker;
   }
 
-  @ApiNotFoundResponse({ description: "Tracker not found" })
   @ApiOperation({ summary: "Update a tracker" })
+  @ApiNotFoundResponse({ description: "Tracker not found" })
   @Patch(':hash')
   async update(
     @Req() request,
@@ -77,8 +77,8 @@ export class TrackersController {
     return this.trackersService.update(tracker, updateTrackerDto);
   }
 
-  @ApiNotFoundResponse({ description: "Tracker not found" })
   @ApiOperation({ summary: "Remove a tracker" })
+  @ApiNotFoundResponse({ description: "Tracker not found" })
   @Delete(':hash')
   async remove(@Req() request, @Param('hash') hash: string) {
     const tracker = await this.trackersService.findOneByHashAndUser(hash, request.user.id);
