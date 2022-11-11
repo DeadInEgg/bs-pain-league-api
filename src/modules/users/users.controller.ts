@@ -4,45 +4,98 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
-  ParseIntPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  Req,
+  HttpException,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from 'src/decorators/public';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiNotFoundResponse } from '@nestjs/swagger';
+import { UpdatePasswordDto } from "./dto/update-password.dto";
 
+@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @ApiOperation({ summary: "Create a user" })
   @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @ApiOperation({ summary: "Get current user's infos" })
+  @ApiNotFoundResponse({ description: "User not found" })
   @ApiBearerAuth()
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOneById(+id);
+  @Get('/me')
+  async findOne(@Req() request) {
+    const user = await this.usersService.findOneById(request.user.id);
+
+    if (null === user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
   }
 
   @ApiBearerAuth()
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
+  @ApiOperation({ summary: "Update current user's infos" })
+  @ApiNotFoundResponse({ description: "User not found" })
+  @Patch('/me')
+  async update(
+    @Req() request,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.update(+id, updateUserDto);
+    const user = await this.usersService.findOneById(request.user.id);
+
+    if (null === user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return this.usersService.update(user, updateUserDto);
   }
 
   @ApiBearerAuth()
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.remove(+id);
+  @ApiOperation({ summary: "Update current user's password" })
+  @ApiNotFoundResponse({ description: "User not found" })
+  @HttpCode(204)
+  @Patch('/me/password')
+  async updatePassword(@Req() request, @Body() updatePasswordDto: UpdatePasswordDto) {
+    const user = await this.usersService.findOneById(request.user.id);
+
+    if (null === user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const match = await this.usersService.comparePassword(updatePasswordDto.oldPassword, user.password);
+
+    if (!match) {
+      throw new HttpException('Wrong password', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    this.usersService.updatePassword(user, updatePasswordDto.newPassword);
+  }
+
+  @ApiOperation({ summary: "Remove current user" })
+  @ApiNotFoundResponse({ description: "User not found" })
+  @ApiBearerAuth()
+  @HttpCode(204)
+  @Delete('/me')
+  async remove(@Req() request) {
+    const user = await this.usersService.findOneById(request.user.id);
+
+    if (null === user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    this.usersService.remove(user);
   }
 }

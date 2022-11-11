@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -14,8 +14,7 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    const hash = bcrypt.hashSync(createUserDto.password, 10);
-    createUserDto.password = hash;
+    createUserDto.password = this.encryptPassword(createUserDto.password);
     const user = this.usersRepository.create(createUserDto);
 
     return this.usersRepository.save(user);
@@ -29,22 +28,27 @@ export class UsersService {
     return this.usersRepository.findOneBy({ mail });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.findOneById(id);
-
-    if (!user) {
-      throw new HttpException(
-        'User not found',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-
-    return await this.usersRepository.save({ ...user, ...updateUserDto });
+  async update(user: User, updateUserDto: UpdateUserDto): Promise<User> {
+    return await this.usersRepository.save({
+      ...user,
+      ...updateUserDto
+    });
   }
 
-  async remove(id: number): Promise<User> {
-    const user = await this.findOneById(id);
+  async updatePassword(user: User, newPassword: string): Promise<User> {
+    user.password = this.encryptPassword(newPassword);
+    return await this.usersRepository.save(user);
+  }
 
+  async remove(user: User): Promise<User> {
     return await this.usersRepository.remove(user);
+  }
+
+  encryptPassword(password: string): string {
+    return bcrypt.hashSync(password, 10)
+  }
+
+  async comparePassword(password1: string, password2: string): Promise<boolean> {
+    return await bcrypt.compare(password1, password2);
   }
 }
