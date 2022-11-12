@@ -5,12 +5,15 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { GamesModule } from './modules/games/games.module';
-import { dataSourceOptions } from 'src/data-source';
+import { dataSourceOptions } from './data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRoot({
+      ...dataSourceOptions,
+      autoLoadEntities: true,
+    }),
     TrackersModule,
     UsersModule,
     AuthModule,
