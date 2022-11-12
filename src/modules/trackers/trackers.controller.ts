@@ -44,7 +44,7 @@ export class TrackersController {
       throw new HttpException('Invalid bearer token', HttpStatus.UNAUTHORIZED);
     }
 
-    return this.trackersService.create(createTrackerDto, user);
+    return await this.trackersService.create(createTrackerDto, user);
   }
 
   @ApiOperation({
@@ -52,8 +52,8 @@ export class TrackersController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findByCurrentUser(@Req() request) {
-    return this.trackersService.findByUserId(request.user.id);
+  async findByCurrentUser(@Req() request) {
+    return await this.trackersService.findByUserId(request.user.id);
   }
 
   @ApiOperation({ summary: "Get tracker's infos" })
@@ -74,7 +74,7 @@ export class TrackersController {
 
   @ApiOperation({ summary: 'Update a tracker' })
   @ApiNotFoundResponse({ description: 'Tracker not found' })
-  @ApiNoContentResponse({description: 'Tracker updated successfully'})
+  @ApiNoContentResponse({ description: 'Tracker updated successfully' })
   @HttpCode(204)
   @Patch(':hash')
   async update(
@@ -84,7 +84,7 @@ export class TrackersController {
   ) {
     const tracker = await this.trackersService.findOneByHashAndUserId(
       hash,
-      request.user.id
+      request.user.id,
     );
 
     if (null === tracker) {
@@ -101,7 +101,7 @@ export class TrackersController {
   async remove(@Req() request, @Param('hash') hash: string) {
     const tracker = await this.trackersService.findOneByHashAndUserId(
       hash,
-      request.user.id
+      request.user.id,
     );
 
     if (null === tracker) {

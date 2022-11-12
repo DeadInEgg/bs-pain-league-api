@@ -14,12 +14,12 @@ export class TrackersService {
   ) {}
 
   async create(createTrackerDto: CreateTrackerDto, user: User) {
-    const tracker = this.trackersRepository.create({
+    const tracker = await this.trackersRepository.create({
       ...createTrackerDto,
       user,
     });
 
-    return this.trackersRepository.save(tracker);
+    return await this.trackersRepository.save(tracker);
   }
 
   async findByUserId(id: number): Promise<Tracker[]> {

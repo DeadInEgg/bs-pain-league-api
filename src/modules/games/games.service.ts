@@ -61,12 +61,12 @@ export class GamesService {
 
     /* Current user is not allowed to see the game */
     if (userId !== game.tracker.user.id) {
-      throw new ResourceNotFoundException('Game not found')
+      throw new ResourceNotFoundException('Game not found');
     }
 
     return await this.gamesRepository.findOne({
       where: {
-        id: gameId
+        id: gameId,
       },
       relations: {
         map: true,
@@ -74,20 +74,20 @@ export class GamesService {
           type: true,
         },
       },
-    })
+    });
   }
 
   async findOneByIdWithTracker(gameId: number): Promise<Game> {
     return await this.gamesRepository.findOne({
       where: {
-        id: gameId
+        id: gameId,
       },
       relations: {
         tracker: {
-          user: true
-        }
-      }
-    })
+          user: true,
+        },
+      },
+    });
   }
 
   async create(createGameDto: CreateGameDto, userId: number) {
@@ -109,7 +109,7 @@ export class GamesService {
 
     const tracker = await this.trackerService.findOneByHashAndUserId(
       createGameDto.trackerHash,
-      userId
+      userId,
     );
 
     if (null === tracker) {
@@ -189,7 +189,7 @@ export class GamesService {
 
     /* Current user is not allowed to remove the game */
     if (userId !== game.tracker.user.id) {
-      throw new ResourceNotFoundException('Game not found')
+      throw new ResourceNotFoundException('Game not found');
     }
 
     return await this.gamesRepository.remove(game);

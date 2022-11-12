@@ -24,14 +24,14 @@ export class UsersService {
     return this.usersRepository.findOneBy({ id });
   }
 
-  findOneByMail(mail: string): Promise<User> {
-    return this.usersRepository.findOneBy({ mail });
+  async findOneByMail(mail: string): Promise<User> {
+    return await this.usersRepository.findOneBy({ mail });
   }
 
   async update(user: User, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.usersRepository.save({
       ...user,
-      ...updateUserDto
+      ...updateUserDto,
     });
   }
 
@@ -45,10 +45,13 @@ export class UsersService {
   }
 
   encryptPassword(password: string): string {
-    return bcrypt.hashSync(password, 10)
+    return bcrypt.hashSync(password, 10);
   }
 
-  async comparePassword(password1: string, password2: string): Promise<boolean> {
+  async comparePassword(
+    password1: string,
+    password2: string,
+  ): Promise<boolean> {
     return await bcrypt.compare(password1, password2);
   }
 }
