@@ -27,13 +27,11 @@ export class TrackersService {
   }
 
   async findByUserId(id: number): Promise<Tracker[]> {
-    return await this.trackersRepository.find({
-        where: {
-          user: {
-            id
-          }
-        }
-      });
+    return await this.trackersRepository.findBy({
+      user: {
+        id
+      },
+    });
   }
 
   async findOneByHashAndUserIdWithGames(hash: string, userId: number): Promise<Tracker> {

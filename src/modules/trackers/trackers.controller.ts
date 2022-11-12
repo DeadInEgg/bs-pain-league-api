@@ -10,13 +10,14 @@ import {
   HttpException,
   HttpStatus,
   ClassSerializerInterceptor,
-  UseInterceptors
+  UseInterceptors,
+  HttpCode,
 } from '@nestjs/common';
 import { TrackersService } from './trackers.service';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
 import { UsersService } from 'src/modules/users/users.service';
-import {ApiBearerAuth, ApiNotFoundResponse, ApiOperation, ApiTags} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('Trackers')
@@ -79,6 +80,7 @@ export class TrackersController {
 
   @ApiOperation({ summary: "Remove a tracker" })
   @ApiNotFoundResponse({ description: "Tracker not found" })
+  @HttpCode(204)
   @Delete(':hash')
   async remove(@Req() request, @Param('hash') hash: string) {
     const tracker = await this.trackersService.findOneByHashAndUser(hash, request.user.id);
@@ -87,6 +89,6 @@ export class TrackersController {
       throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
     }
 
-    return this.trackersService.remove(tracker);
+    this.trackersService.remove(tracker);
   }
 }
