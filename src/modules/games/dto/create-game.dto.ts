@@ -1,8 +1,13 @@
-import { IsNotEmpty } from 'class-validator';
+import {IsEnum, IsNotEmpty} from 'class-validator';
 import { GameResult } from '../entities/game.entity';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateGameDto {
+  @IsEnum(GameResult, {
+    message: 'result must be : victory, draw or defeat'
+  })
   @IsNotEmpty()
+  @ApiProperty({ enum: ['victory', 'draw', 'defeat'] })
   result: GameResult;
 
   @IsNotEmpty()
@@ -12,5 +17,5 @@ export class CreateGameDto {
   modeId: number;
 
   @IsNotEmpty()
-  trackerId: number;
+  trackerHash: string;
 }

@@ -54,7 +54,7 @@ export class TrackersService {
     });
   }
 
-  async findOneByHashAndUser(hash: string, userId: number): Promise<Tracker> {
+  async findOneByHashAndUserId(hash: string, userId: number): Promise<Tracker> {
     return await this.trackersRepository.findOne({
       where: {
         hash,

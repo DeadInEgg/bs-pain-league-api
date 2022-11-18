@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ApiHideProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '../../users/entities/user.entity';
 import { Game } from '../..//games/entities/game.entity';
 
@@ -41,6 +41,7 @@ export class Tracker {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @ApiPropertyOptional()
   @OneToMany(() => Game, (game) => game.tracker)
   games: Game[];
 
