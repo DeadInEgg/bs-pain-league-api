@@ -1,10 +1,10 @@
-import {IsEnum, IsNotEmpty} from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 import { GameResult } from '../entities/game.entity';
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGameDto {
   @IsEnum(GameResult, {
-    message: 'result must be : victory, draw or defeat'
+    message: 'Result must be : victory, draw or defeat'
   })
   @IsNotEmpty()
   @ApiProperty({ enum: ['victory', 'draw', 'defeat'] })

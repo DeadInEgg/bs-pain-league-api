@@ -8,8 +8,6 @@ import {
 } from 'typeorm';
 import { Game } from './game.entity';
 import { Mode } from './mode.entity';
-import {Expose} from "class-transformer";
-import {ApiProperty} from "@nestjs/swagger";
 
 @Entity()
 export class Map {

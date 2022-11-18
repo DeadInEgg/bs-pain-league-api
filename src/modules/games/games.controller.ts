@@ -15,8 +15,8 @@ import { GamesService } from './games.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { ApiBearerAuth, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ResourceNotFoundException } from "../../exceptions/ResourceNotFoundException";
-import {MissingTagException} from "../../exceptions/MissingTagException";
+import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
+import { MissingTagException } from '../../exceptions/MissingTagException';
 
 @ApiBearerAuth()
 @ApiTags('Games')

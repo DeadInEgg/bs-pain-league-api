@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Game } from './game.entity';
 import { Type } from './type.entity';
-import { ApiHideProperty } from "@nestjs/swagger";
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Mode {

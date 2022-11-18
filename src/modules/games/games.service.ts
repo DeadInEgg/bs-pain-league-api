@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrackersService } from '../trackers/trackers.service';
 import { firstValueFrom, map } from 'rxjs';
@@ -9,10 +9,8 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
-import {ResourceNotFoundException} from "../../exceptions/ResourceNotFoundException";
-import {MissingTagException} from "../../exceptions/MissingTagException";
-import {log} from "util";
-import {dtsDtsxOrDtsDtsxMapRegex} from "ts-loader/dist/constants";
+import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
+import { MissingTagException } from '../../exceptions/MissingTagException';
 
 @Injectable()
 export class GamesService {

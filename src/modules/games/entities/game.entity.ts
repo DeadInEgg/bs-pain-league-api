@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Map } from './map.entity';
 import { Mode } from './mode.entity';
-import { ApiHideProperty } from "@nestjs/swagger";
+import { ApiHideProperty } from '@nestjs/swagger';
 
 export enum GameResult {
   VICTORY = 'victory',
