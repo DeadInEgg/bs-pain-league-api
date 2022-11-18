@@ -21,6 +21,7 @@ import {
   ApiBearerAuth,
   ApiOperation,
   ApiNotFoundResponse,
+  ApiNoContentResponse
 } from '@nestjs/swagger';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 
@@ -63,6 +64,8 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: "Update current user's infos" })
   @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiNoContentResponse({description: 'User updated successfully'})
+  @HttpCode(204)
   @Patch('/me')
   async update(@Req() request, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.usersService.findOneById(request.user.id);
@@ -86,8 +89,9 @@ export class UsersController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ summary: "Update current user's password" })
+  @ApiOperation({ summary: 'Update current user\'s password' })
   @ApiNotFoundResponse({ description: 'User not found' })
+  @ApiNoContentResponse({description: 'Password updated successfully'})
   @HttpCode(204)
   @Patch('/me/password')
   async updatePassword(

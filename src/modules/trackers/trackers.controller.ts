@@ -19,6 +19,7 @@ import { UpdateTrackerDto } from './dto/update-tracker.dto';
 import { UsersService } from '../users/users.service';
 import {
   ApiBearerAuth,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
@@ -73,22 +74,24 @@ export class TrackersController {
 
   @ApiOperation({ summary: 'Update a tracker' })
   @ApiNotFoundResponse({ description: 'Tracker not found' })
+  @ApiNoContentResponse({description: 'Tracker updated successfully'})
+  @HttpCode(204)
   @Patch(':hash')
   async update(
     @Req() request,
     @Param('hash') hash: string,
     @Body() updateTrackerDto: UpdateTrackerDto,
   ) {
-    const tracker = await this.trackersService.findOneByHashAndUser(
+    const tracker = await this.trackersService.findOneByHashAndUserId(
       hash,
-      request.user.id,
+      request.user.id
     );
 
     if (null === tracker) {
       throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
     }
 
-    return this.trackersService.update(tracker, updateTrackerDto);
+    await this.trackersService.update(tracker, updateTrackerDto);
   }
 
   @ApiOperation({ summary: 'Remove a tracker' })
@@ -96,9 +99,9 @@ export class TrackersController {
   @HttpCode(204)
   @Delete(':hash')
   async remove(@Req() request, @Param('hash') hash: string) {
-    const tracker = await this.trackersService.findOneByHashAndUser(
+    const tracker = await this.trackersService.findOneByHashAndUserId(
       hash,
-      request.user.id,
+      request.user.id
     );
 
     if (null === tracker) {

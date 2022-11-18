@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Map } from './map.entity';
 import { Mode } from './mode.entity';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 export enum GameResult {
   VICTORY = 'victory',
@@ -40,6 +41,7 @@ export class Game {
   @JoinColumn({ name: 'mode_id' })
   mode: Mode;
 
+  @ApiHideProperty()
   @ManyToOne(() => Tracker, (tracker) => tracker.games, {
     nullable: false,
     onDelete: 'CASCADE',

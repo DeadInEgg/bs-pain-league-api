@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrackersService } from '../trackers/trackers.service';
 import { firstValueFrom, map } from 'rxjs';
@@ -9,6 +9,8 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
+import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
+import { MissingTagException } from '../../exceptions/MissingTagException';
 
 @Injectable()
 export class GamesService {
@@ -50,16 +52,70 @@ export class GamesService {
     return games;
   }
 
-  async create(createGameDto: CreateGameDto) {
+  async findOneById(userId: number, gameId: number) {
+    const game = await this.findOneByIdWithTracker(gameId);
+
+    if (null === game) {
+      throw new ResourceNotFoundException('Game not found');
+    }
+
+    /* Current user is not allowed to see the game */
+    if (userId !== game.tracker.user.id) {
+      throw new ResourceNotFoundException('Game not found')
+    }
+
+    return await this.gamesRepository.findOne({
+      where: {
+        id: gameId
+      },
+      relations: {
+        map: true,
+        mode: {
+          type: true,
+        },
+      },
+    })
+  }
+
+  async findOneByIdWithTracker(gameId: number): Promise<Game> {
+    return await this.gamesRepository.findOne({
+      where: {
+        id: gameId
+      },
+      relations: {
+        tracker: {
+          user: true
+        }
+      }
+    })
+  }
+
+  async create(createGameDto: CreateGameDto, userId: number) {
     const map = await this.mapsRepository.findOneBy({
       id: createGameDto.mapId,
     });
+
+    if (null === map) {
+      throw new ResourceNotFoundException('Map not found');
+    }
+
     const mode = await this.modesRepository.findOneBy({
       id: createGameDto.modeId,
     });
-    const tracker = await this.trackerService.findOneById(
-      createGameDto.trackerId,
+
+    if (null === mode) {
+      throw new ResourceNotFoundException('Mode not found');
+    }
+
+    const tracker = await this.trackerService.findOneByHashAndUserId(
+      createGameDto.trackerHash,
+      userId
     );
+
+    if (null === tracker) {
+      throw new ResourceNotFoundException('Tracker not found');
+    }
+
     const game = this.gamesRepository.create({
       ...createGameDto,
       map,
@@ -70,7 +126,14 @@ export class GamesService {
     return this.gamesRepository.save(game);
   }
 
-  async findSuggest(tag: string): Promise<Game[]> {
+  async findSuggest(gameId: number) {
+    const game = await this.findOneByIdWithTracker(gameId);
+    const tag = game.tracker.tag;
+
+    if (null === tag) {
+      throw new MissingTagException();
+    }
+
     return await firstValueFrom(
       this.httpService
         .get(`/players/%23${tag}/battlelog`)
@@ -78,47 +141,57 @@ export class GamesService {
     );
   }
 
-  findOneById(id: number) {
-    return this.gamesRepository.findOne({
-      where: { id: id },
-      relations: { tracker: true },
-    });
-  }
+  async update(userId: number, gameId: number, updateGameDto: UpdateGameDto) {
+    const game = await this.findOneByIdWithTracker(gameId);
 
-  async update(id: number, updateGameDto: UpdateGameDto) {
-    const game = await this.findOneById(id);
+    if (null === game) {
+      throw new ResourceNotFoundException('Game not found');
+    }
 
-    if (!game) {
-      throw new HttpException(
-        'Game not found',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    /* Current user is not allowed to remove the game */
+    if (userId !== game.tracker.user.id) {
+      throw new ResourceNotFoundException('Game not found');
     }
 
     if (updateGameDto.mapId) {
-      game.map = await this.mapsRepository.findOneBy({
+      const map = await this.mapsRepository.findOneBy({
         id: updateGameDto.mapId,
       });
+
+      if (null === map) {
+        throw new ResourceNotFoundException('Map not found');
+      }
+
+      game.map = map;
     }
 
     if (updateGameDto.modeId) {
-      game.mode = await this.modesRepository.findOneBy({
+      const mode = await this.modesRepository.findOneBy({
         id: updateGameDto.modeId,
       });
-    }
 
-    if (updateGameDto.trackerId) {
-      game.tracker = await this.trackerService.findOneById(
-        updateGameDto.trackerId,
-      );
+      if (null === mode) {
+        throw new ResourceNotFoundException('Mode not found');
+      }
+
+      game.mode = mode;
     }
 
     return this.gamesRepository.save({ ...game, ...updateGameDto });
   }
 
-  async remove(id: number) {
-    const game = await this.findOneById(id);
+  async remove(userId: number, gameId: number) {
+    const game = await this.findOneByIdWithTracker(gameId);
 
-    return this.gamesRepository.remove(game);
+    if (null === game) {
+      throw new ResourceNotFoundException('Game not found');
+    }
+
+    /* Current user is not allowed to remove the game */
+    if (userId !== game.tracker.user.id) {
+      throw new ResourceNotFoundException('Game not found')
+    }
+
+    return await this.gamesRepository.remove(game);
   }
 }
