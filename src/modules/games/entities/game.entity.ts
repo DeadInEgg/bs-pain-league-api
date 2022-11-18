@@ -1,4 +1,4 @@
-import { Tracker } from 'src/modules/trackers/entities/tracker.entity';
+import { Tracker } from '../../trackers/entities/tracker.entity';
 import {
   Column,
   CreateDateColumn,

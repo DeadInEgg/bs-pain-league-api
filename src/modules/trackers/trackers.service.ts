@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
@@ -29,25 +29,28 @@ export class TrackersService {
   async findByUserId(id: number): Promise<Tracker[]> {
     return await this.trackersRepository.findBy({
       user: {
-        id
+        id,
       },
     });
   }
 
-  async findOneByHashAndUserIdWithGames(hash: string, userId: number): Promise<Tracker> {
+  async findOneByHashAndUserIdWithGames(
+    hash: string,
+    userId: number,
+  ): Promise<Tracker> {
     return await this.trackersRepository.findOne({
       where: {
         hash,
         user: {
-          id: userId
-        }
+          id: userId,
+        },
       },
       relations: {
         games: {
           mode: true,
           map: true,
-        }
-      }
+        },
+      },
     });
   }
 
@@ -56,9 +59,9 @@ export class TrackersService {
       where: {
         hash,
         user: {
-          id: userId
-        }
-      }
+          id: userId,
+        },
+      },
     });
   }
 

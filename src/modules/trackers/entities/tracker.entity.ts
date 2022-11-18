@@ -1,6 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { Game } from 'src/modules/games/entities/game.entity';
-import { User } from 'src/modules/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,7 +10,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ApiHideProperty } from "@nestjs/swagger";
+import { ApiHideProperty } from '@nestjs/swagger';
+import { User } from '../../users/entities/user.entity';
+import { Game } from '../..//games/entities/game.entity';
 
 @Entity()
 export class Tracker {

@@ -1,5 +1,5 @@
-import { Tracker } from 'src/modules/trackers/entities/tracker.entity';
-import {ApiHideProperty, ApiProperty} from '@nestjs/swagger';
+import { Tracker } from '../../../modules/trackers/entities/tracker.entity';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -8,7 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import {Exclude} from "class-transformer";
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {

@@ -7,7 +7,7 @@ import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
 import { Type } from './entities/type.entity';
-import { TrackersModule } from 'src/modules/trackers/trackers.module';
+import { TrackersModule } from '../trackers/trackers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({

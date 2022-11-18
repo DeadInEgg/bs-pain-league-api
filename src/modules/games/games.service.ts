@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TrackersService } from 'src/modules/trackers/trackers.service';
+import { TrackersService } from '../trackers/trackers.service';
 import { firstValueFrom, map } from 'rxjs';
 import { Repository } from 'typeorm';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -79,7 +79,10 @@ export class GamesService {
   }
 
   findOneById(id: number) {
-    return this.gamesRepository.findOne({where: {id: id}, relations: {tracker: true}});
+    return this.gamesRepository.findOne({
+      where: { id: id },
+      relations: { tracker: true },
+    });
   }
 
   async update(id: number, updateGameDto: UpdateGameDto) {

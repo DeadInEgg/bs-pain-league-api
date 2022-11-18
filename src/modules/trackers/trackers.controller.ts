@@ -16,8 +16,13 @@ import {
 import { TrackersService } from './trackers.service';
 import { CreateTrackerDto } from './dto/create-tracker.dto';
 import { UpdateTrackerDto } from './dto/update-tracker.dto';
-import { UsersService } from 'src/modules/users/users.service';
-import { ApiBearerAuth, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UsersService } from '../users/users.service';
+import {
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('Trackers')
@@ -28,20 +33,22 @@ export class TrackersController {
     private readonly usersService: UsersService,
   ) {}
 
-  @ApiOperation({ summary: "Create a tracker for the current logged user" })
+  @ApiOperation({ summary: 'Create a tracker for the current logged user' })
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   async create(@Req() request, @Body() createTrackerDto: CreateTrackerDto) {
     const user = await this.usersService.findOneByMail(request.user.mail);
 
     if (null === user) {
-      throw new HttpException('Invalid bearer token', HttpStatus.UNAUTHORIZED)
+      throw new HttpException('Invalid bearer token', HttpStatus.UNAUTHORIZED);
     }
 
     return this.trackersService.create(createTrackerDto, user);
   }
 
-  @ApiOperation({ summary: "Get a list of trackers for the current logged user" })
+  @ApiOperation({
+    summary: 'Get a list of trackers for the current logged user',
+  })
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findByCurrentUser(@Req() request) {
@@ -49,10 +56,13 @@ export class TrackersController {
   }
 
   @ApiOperation({ summary: "Get tracker's infos" })
-  @ApiNotFoundResponse({ description: "Tracker not found" })
+  @ApiNotFoundResponse({ description: 'Tracker not found' })
   @Get(':hash')
   async findByHash(@Param('hash') hash: string, @Req() request) {
-    const tracker = await this.trackersService.findOneByHashAndUserIdWithGames(hash, request.user.id);
+    const tracker = await this.trackersService.findOneByHashAndUserIdWithGames(
+      hash,
+      request.user.id,
+    );
 
     if (null === tracker) {
       throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
@@ -61,15 +71,18 @@ export class TrackersController {
     return tracker;
   }
 
-  @ApiOperation({ summary: "Update a tracker" })
-  @ApiNotFoundResponse({ description: "Tracker not found" })
+  @ApiOperation({ summary: 'Update a tracker' })
+  @ApiNotFoundResponse({ description: 'Tracker not found' })
   @Patch(':hash')
   async update(
     @Req() request,
     @Param('hash') hash: string,
     @Body() updateTrackerDto: UpdateTrackerDto,
   ) {
-    const tracker = await this.trackersService.findOneByHashAndUser(hash, request.user.id);
+    const tracker = await this.trackersService.findOneByHashAndUser(
+      hash,
+      request.user.id,
+    );
 
     if (null === tracker) {
       throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
@@ -78,17 +91,20 @@ export class TrackersController {
     return this.trackersService.update(tracker, updateTrackerDto);
   }
 
-  @ApiOperation({ summary: "Remove a tracker" })
-  @ApiNotFoundResponse({ description: "Tracker not found" })
+  @ApiOperation({ summary: 'Remove a tracker' })
+  @ApiNotFoundResponse({ description: 'Tracker not found' })
   @HttpCode(204)
   @Delete(':hash')
   async remove(@Req() request, @Param('hash') hash: string) {
-    const tracker = await this.trackersService.findOneByHashAndUser(hash, request.user.id);
+    const tracker = await this.trackersService.findOneByHashAndUser(
+      hash,
+      request.user.id,
+    );
 
     if (null === tracker) {
       throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
     }
 
-    this.trackersService.remove(tracker);
+    await this.trackersService.remove(tracker);
   }
 }

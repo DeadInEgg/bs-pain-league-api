@@ -12,9 +12,12 @@ export const dataSourceOptions: DataSourceOptions = {
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_DATABASE'),
+};
+
+const jestCLIOptions = {
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/migrations/*.js'],
 };
 
-const dataSource = new DataSource(dataSourceOptions);
+const dataSource = new DataSource({ ...dataSourceOptions, ...jestCLIOptions });
 export default dataSource;
