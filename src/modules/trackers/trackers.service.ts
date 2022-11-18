@@ -22,10 +22,6 @@ export class TrackersService {
     return this.trackersRepository.save(tracker);
   }
 
-  async findOneById(id: number): Promise<Tracker> {
-    return await this.trackersRepository.findOneBy({ id });
-  }
-
   async findByUserId(id: number): Promise<Tracker[]> {
     return await this.trackersRepository.findBy({
       user: {
