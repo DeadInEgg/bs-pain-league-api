@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGameDto {
   @IsEnum(GameResult, {
-    message: 'Result must be : victory, draw or defeat'
+    message: 'Result must be : victory, draw or defeat',
   })
   @IsNotEmpty()
   @ApiProperty({ enum: ['victory', 'draw', 'defeat'] })

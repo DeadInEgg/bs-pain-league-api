@@ -14,7 +14,13 @@ import {
 import { GamesService } from './games.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { ApiBearerAuth, ApiNoContentResponse, ApiNotFoundResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
 import { MissingTagException } from '../../exceptions/MissingTagException';
 
@@ -37,7 +43,7 @@ export class GamesController {
   }
 
   /*
-  * Take the tag from the tracker to find games from Brawl Star api.
+   * Take the tag from the tracker to find games from Brawl Star api.
    */
   @ApiOperation({ summary: 'Get games from Brawl Stars api' })
   @Get(':id/suggest')
@@ -51,7 +57,7 @@ export class GamesController {
     }
   }
 
-  @ApiOperation({ summary: 'Get game\'s info' })
+  @ApiOperation({ summary: "Get game's info" })
   @ApiNotFoundResponse({ description: 'Game not found' })
   @Get(':id')
   async findOne(@Req() request, @Param('id') id: string) {
@@ -69,9 +75,17 @@ export class GamesController {
   @ApiNoContentResponse({ description: 'Game updated successfully' })
   @HttpCode(204)
   @Patch(':id')
-  async update(@Req() request, @Param('id') id: string, @Body() updateGameDto: UpdateGameDto) {
+  async update(
+    @Req() request,
+    @Param('id') id: string,
+    @Body() updateGameDto: UpdateGameDto,
+  ) {
     try {
-      return await this.gamesService.update(request.user.id, +id, updateGameDto);
+      return await this.gamesService.update(
+        request.user.id,
+        +id,
+        updateGameDto,
+      );
     } catch (error) {
       if (error instanceof ResourceNotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
