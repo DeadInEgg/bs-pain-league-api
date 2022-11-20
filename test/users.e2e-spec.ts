@@ -5,6 +5,8 @@ import { AppModule } from '../src/app.module';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { mainConfig } from '../src/main.config';
 import { UpdatePasswordDto } from 'src/modules/users/dto/update-password.dto';
+import dataSource from '../src/data-source';
+import { populate } from '../src/seeds/main';
 
 describe('Users', () => {
   let app: INestApplication;
@@ -37,6 +39,15 @@ describe('Users', () => {
     mainConfig(app);
 
     await app.init();
+    await dataSource.initialize();
+    const queryRunner = dataSource.createQueryRunner();
+    await populate(queryRunner);
+  });
+
+  afterAll(async () => {
+    await dataSource.dropDatabase();
+    await dataSource.destroy();
+    await app.close();
   });
 
   describe('POST /users', () => {
@@ -116,7 +127,7 @@ describe('Users', () => {
       expect(response.status).toBe(409);
     });
 
-    it(`200 - SUCCESS`, async () => {
+    it(`204 - SUCCESS`, async () => {
       const response = await request(app.getHttpServer())
         .patch('/users/me')
         .set('Authorization', 'Bearer ' + jwt)
@@ -124,7 +135,7 @@ describe('Users', () => {
 
       createFirstUserParams.mail = 'new@mail.fr';
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(204);
     });
   });
 
@@ -250,9 +261,5 @@ describe('Users', () => {
 
       expect(response.status).toBe(404);
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
