@@ -11,7 +11,11 @@ export const dataSourceOptions: DataSourceOptions = {
   port: configService.get('DB_PORT'),
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
-  database: configService.get('DB_DATABASE'),
+  database:
+    process.env.NODE_ENV === 'test'
+      ? configService.get('DB_DATABASE_TEST')
+      : configService.get('DB_DATABASE'),
+  synchronize: process.env.NODE_ENV === 'test',
 };
 
 const jestCLIOptions = {

@@ -44,7 +44,7 @@ export class TrackersController {
       throw new HttpException('Invalid bearer token', HttpStatus.UNAUTHORIZED);
     }
 
-    return this.trackersService.create(createTrackerDto, user);
+    return await this.trackersService.create(createTrackerDto, user);
   }
 
   @ApiOperation({
@@ -52,8 +52,8 @@ export class TrackersController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findByCurrentUser(@Req() request) {
-    return this.trackersService.findByUserId(request.user.id);
+  async findByCurrentUser(@Req() request) {
+    return await this.trackersService.findByUserId(request.user.id);
   }
 
   @ApiOperation({ summary: "Get tracker's infos" })
