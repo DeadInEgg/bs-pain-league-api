@@ -5,6 +5,8 @@ import { AppModule } from '../src/app.module';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { mainConfig } from '../src/main.config';
 import { CreateTrackerDto } from 'src/modules/trackers/dto/create-tracker.dto';
+import dataSource from '../src/data-source';
+import { populate } from '../src/seeds/main';
 
 describe('Users', () => {
   let app: INestApplication;
@@ -37,6 +39,15 @@ describe('Users', () => {
     mainConfig(app);
 
     await app.init();
+    await dataSource.initialize();
+    const queryRunner = dataSource.createQueryRunner();
+    await populate(queryRunner);
+  });
+
+  afterAll(async () => {
+    await dataSource.dropDatabase();
+    await dataSource.destroy();
+    await app.close();
   });
 
   describe('POST /trackers', () => {
@@ -150,13 +161,13 @@ describe('Users', () => {
       expect(response.status).toBe(422);
     });
 
-    it(`200 - SUCCESS`, async () => {
+    it(`204 - SUCCESS`, async () => {
       const response = await request(app.getHttpServer())
         .patch(`/trackers/${hash}`)
         .send({ name: 'updated !' })
         .set('Authorization', 'Bearer ' + jwt);
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(204);
     });
 
     it(`404 - ERROR : Tracker not found`, async () => {
@@ -193,10 +204,6 @@ describe('Users', () => {
 
       expect(response.status).toBe(204);
     });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 
   const createUserAndLogin = async () => {
