@@ -4,8 +4,8 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-} from "class-validator";
-import { ClassConstructor } from "class-transformer";
+} from 'class-validator';
+import { ClassConstructor } from 'class-transformer';
 
 @ValidatorConstraint({ async: true })
 export class SameValueThanConstraint implements ValidatorConstraintInterface {
@@ -15,13 +15,17 @@ export class SameValueThanConstraint implements ValidatorConstraintInterface {
     return confirmPassword === relatedProperty(args.object);
   }
 
-  defaultMessage(validationArguments?: ValidationArguments): string {
-    return 'new password and confirm new password don\'t match';
+  defaultMessage(): string {
+    return "new password and confirm new password don't match";
   }
 }
 
-export function SameValueThan<T>(type: ClassConstructor<T>, property: (object: T) => any, validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+export function SameValueThan<T>(
+  type: ClassConstructor<T>,
+  property: (object: T) => any,
+  validationOptions?: ValidationOptions,
+) {
+  return function (object: Record<string, unknown>, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
