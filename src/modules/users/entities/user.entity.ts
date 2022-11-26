@@ -1,4 +1,4 @@
-import { Tracker } from '../../../modules/trackers/entities/tracker.entity';
+import { Tracker } from '../../trackers/entities/tracker.entity';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Entity,

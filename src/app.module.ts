@@ -9,7 +9,7 @@ import { GamesModule } from './modules/games/games.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -30,5 +30,4 @@ import { GamesModule } from './modules/games/games.module';
   controllers: [],
   providers: [],
 })
-
 export class AppModule {}
