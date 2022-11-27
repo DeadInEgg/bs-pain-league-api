@@ -8,7 +8,7 @@ import { CreateTrackerDto } from 'src/modules/trackers/dto/create-tracker.dto';
 import dataSource from '../src/data-source';
 import { populate } from '../src/seeds/main';
 
-describe('Users', () => {
+describe('Trackers', () => {
   let app: INestApplication;
   let jwt;
   let hash;
