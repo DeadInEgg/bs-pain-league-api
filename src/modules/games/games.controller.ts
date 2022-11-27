@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Req,
   HttpCode,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -60,9 +61,9 @@ export class GamesController {
   @ApiOperation({ summary: "Get game's info" })
   @ApiNotFoundResponse({ description: 'Game not found' })
   @Get(':id')
-  async findOne(@Req() request, @Param('id') id: string) {
+  async findOne(@Req() request, @Param('id', ParseIntPipe) id: number) {
     try {
-      return await this.gamesService.findOneById(request.user.id, +id);
+      return await this.gamesService.findOneById(request.user.id, id);
     } catch (error) {
       if (error instanceof ResourceNotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
@@ -77,15 +78,11 @@ export class GamesController {
   @Patch(':id')
   async update(
     @Req() request,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateGameDto: UpdateGameDto,
   ) {
     try {
-      return await this.gamesService.update(
-        request.user.id,
-        +id,
-        updateGameDto,
-      );
+      return await this.gamesService.update(request.user.id, id, updateGameDto);
     } catch (error) {
       if (error instanceof ResourceNotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
@@ -98,7 +95,7 @@ export class GamesController {
   @ApiNoContentResponse({ description: 'Game deleted successfully' })
   @HttpCode(204)
   @Delete(':id')
-  async remove(@Req() request, @Param('id') id: string) {
+  async remove(@Req() request, @Param('id', ParseIntPipe) id: number) {
     try {
       return await this.gamesService.remove(request.user.id, +id);
     } catch (error) {
