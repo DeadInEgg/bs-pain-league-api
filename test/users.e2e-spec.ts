@@ -7,24 +7,20 @@ import { mainConfig } from '../src/main.config';
 import { UpdatePasswordDto } from 'src/modules/users/dto/update-password.dto';
 import dataSource from '../src/data-source';
 import { populate } from '../src/seeds/main';
+import { connectUser } from './utils';
+import { users } from '../src/seeds/user';
 
 describe('Users', () => {
   let app: INestApplication;
   let jwt;
-  let user;
 
-  const createFirstUserParams: CreateUserDto = {
-    mail: 'maxime@mail.fr',
-    password: 'Password123!',
-    username: 'DarkMaxime',
+  const createUserDto: CreateUserDto = {
+    mail: 'new.user@mail.fr',
+    password: 'Password999!',
+    username: 'NewUser',
   };
-  const createSecondUserParams: CreateUserDto = {
-    mail: 'marius@mail.fr',
-    password: 'Password456?',
-    username: 'DarkMarius',
-  };
-  const updatePasswordParams: UpdatePasswordDto = {
-    oldPassword: 'Password123!',
+  const updatePasswordDto: UpdatePasswordDto = {
+    oldPassword: createUserDto.password,
     newPassword: 'NewPassword123!',
     confirmNewPassword: 'NewPassword123!',
   };
@@ -41,7 +37,7 @@ describe('Users', () => {
     await app.init();
     await dataSource.initialize();
     const queryRunner = dataSource.createQueryRunner();
-    await populate(queryRunner);
+    await populate(queryRunner, ['user']);
   });
 
   afterAll(async () => {
@@ -54,7 +50,7 @@ describe('Users', () => {
     it(`422 - ERROR : Password to weak`, async () => {
       const response = await request(app.getHttpServer())
         .post('/users')
-        .send({ ...createFirstUserParams, password: 'toweak' });
+        .send({ ...createUserDto, password: 'toweak' });
 
       expect(response.status).toBe(422);
     });
@@ -62,7 +58,7 @@ describe('Users', () => {
     it(`422 - ERROR : Email not on correct format`, async () => {
       const response = await request(app.getHttpServer())
         .post('/users')
-        .send({ ...createFirstUserParams, mail: 'notmail' });
+        .send({ ...createUserDto, mail: 'notmail' });
 
       expect(response.status).toBe(422);
     });
@@ -70,17 +66,15 @@ describe('Users', () => {
     it(`201 - SUCCESS`, async () => {
       const response = await request(app.getHttpServer())
         .post('/users')
-        .send(createFirstUserParams);
+        .send(createUserDto);
 
       expect(response.status).toBe(201);
-
-      user = response.body;
     });
 
     it(`409 - ERROR : Email already exist`, async () => {
       const response = await request(app.getHttpServer())
         .post('/users')
-        .send(createFirstUserParams);
+        .send(createUserDto);
 
       expect(response.status).toBe(409);
     });
@@ -96,33 +90,21 @@ describe('Users', () => {
     });
 
     it(`422 - ERROR : Email not on correct format`, async () => {
-      const authResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          mail: createFirstUserParams.mail,
-          password: createFirstUserParams.password,
-        });
-
-      jwt = authResponse.body.access_token;
+      jwt = await connectUser(app, createUserDto.mail, createUserDto.password);
 
       const response = await request(app.getHttpServer())
         .patch('/users/me')
         .set('Authorization', 'Bearer ' + jwt)
         .send({ mail: 'notmail' });
+
       expect(response.status).toBe(422);
     });
 
     it(`409 - ERROR : Email already exist`, async () => {
-      const createResponse = await request(app.getHttpServer())
-        .post('/users')
-        .send(createSecondUserParams);
-
-      user = createResponse.body;
-
       const response = await request(app.getHttpServer())
         .patch('/users/me')
         .set('Authorization', 'Bearer ' + jwt)
-        .send({ mail: createSecondUserParams.mail });
+        .send({ mail: users[0].mail });
 
       expect(response.status).toBe(409);
     });
@@ -133,7 +115,7 @@ describe('Users', () => {
         .set('Authorization', 'Bearer ' + jwt)
         .send({ mail: 'new@mail.fr' });
 
-      createFirstUserParams.mail = 'new@mail.fr';
+      createUserDto.mail = 'new@mail.fr';
 
       expect(response.status).toBe(204);
     });
@@ -142,24 +124,20 @@ describe('Users', () => {
   describe('GET /users/me', () => {
     it(`401 - ERROR : Not authentificated`, async () => {
       const response = await request(app.getHttpServer()).get('/users/me');
+
       expect(response.status).toBe(401);
     });
 
     it(`200 - SUCCESS`, async () => {
-      const authResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          mail: createSecondUserParams.mail,
-          password: createSecondUserParams.password,
-        });
-
-      jwt = authResponse.body.access_token;
+      jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
         .get('/users/me')
         .set('Authorization', 'Bearer ' + jwt);
+
       expect(response.status).toBe(200);
-      expect(response.body).toEqual(expect.objectContaining(user));
+      expect(response.body.mail).toBe(users[0].mail);
+      expect(response.body.username).toBe(users[0].username);
     });
 
     it(`404 - ERROR : User not found`, async () => {
@@ -169,6 +147,7 @@ describe('Users', () => {
       const response = await request(app.getHttpServer())
         .get('/users/me')
         .set('Authorization', 'Bearer ' + jwt);
+
       expect(response.status).toBe(404);
     });
   });
@@ -183,18 +162,11 @@ describe('Users', () => {
     });
 
     it(`422 - ERROR : Wrong old password`, async () => {
-      const authResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          mail: createFirstUserParams.mail,
-          password: createFirstUserParams.password,
-        });
-
-      jwt = authResponse.body.access_token;
+      jwt = await connectUser(app, createUserDto.mail, createUserDto.password);
 
       const response = await request(app.getHttpServer())
         .patch('/users/me/password')
-        .send({ ...updatePasswordParams, oldPassword: 'wrong' })
+        .send({ ...updatePasswordDto, oldPassword: 'wrong' })
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(422);
@@ -203,7 +175,7 @@ describe('Users', () => {
     it(`422 - ERROR : New password to weak`, async () => {
       const response = await request(app.getHttpServer())
         .patch('/users/me/password')
-        .send({ ...updatePasswordParams, newPassword: 'to weak' })
+        .send({ ...updatePasswordDto, newPassword: 'to weak' })
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(422);
@@ -212,7 +184,7 @@ describe('Users', () => {
     it(`422 - ERROR : Not the same password`, async () => {
       const response = await request(app.getHttpServer())
         .patch('/users/me/password')
-        .send({ ...updatePasswordParams, confirmNewPassword: 'NotTheSame123!' })
+        .send({ ...updatePasswordDto, confirmNewPassword: 'NotTheSame123!' })
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(422);
@@ -221,12 +193,12 @@ describe('Users', () => {
     it(`204 - SUCCESS`, async () => {
       const response = await request(app.getHttpServer())
         .patch('/users/me/password')
-        .send(updatePasswordParams)
+        .send(updatePasswordDto)
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(204);
 
-      createFirstUserParams.password = 'NewPassword123!';
+      createUserDto.password = 'NewPassword123!';
     });
   });
 
@@ -238,14 +210,7 @@ describe('Users', () => {
     });
 
     it(`204 - SUCCESS`, async () => {
-      const authResponse = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-          mail: createFirstUserParams.mail,
-          password: createFirstUserParams.password,
-        });
-
-      jwt = authResponse.body.access_token;
+      jwt = await connectUser(app, createUserDto.mail, createUserDto.password);
 
       const response = await request(app.getHttpServer())
         .delete('/users/me')
