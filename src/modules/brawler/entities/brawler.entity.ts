@@ -15,7 +15,7 @@ export class Brawler {
   name: string;
 
   @Column()
-  image: string
+  image: string;
 
   @CreateDateColumn({
     name: 'created_at',

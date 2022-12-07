@@ -19,7 +19,7 @@ export type Table =
 
 export const populate = async (
   queryRunner: QueryRunner,
-  tables: Table[] = ['map', 'mode', 'maps_modes', 'type'],
+  tables: Table[] = ['map', 'mode', 'maps_modes', 'type', 'brawler'],
 ) => {
   if (tables.includes('type')) {
     for (const type of types) {
