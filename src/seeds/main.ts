@@ -5,13 +5,21 @@ import { modes_maps } from './modes_maps';
 import { trackers } from './tracker';
 import { types } from './type';
 import { users } from './user';
+import { brawlers } from './brawler';
 import * as bcrypt from 'bcrypt';
 
-export type Table = 'type' | 'mode' | 'map' | 'maps_modes' | 'user' | 'tracker';
+export type Table =
+  | 'type'
+  | 'mode'
+  | 'map'
+  | 'maps_modes'
+  | 'user'
+  | 'tracker'
+  | 'brawler';
 
 export const populate = async (
   queryRunner: QueryRunner,
-  tables: Table[] = ['map', 'mode', 'maps_modes', 'type'],
+  tables: Table[] = ['map', 'mode', 'maps_modes', 'type', 'brawler'],
 ) => {
   if (tables.includes('type')) {
     for (const type of types) {
@@ -65,6 +73,14 @@ export const populate = async (
         }"))`,
       );
     }
+  }
+
+  if (tables.includes('brawler')) {
+    brawlers.forEach(async (brawler) => {
+      await queryRunner.query(
+        `INSERT INTO brawler (name, image) VALUES ("${brawler.name}", "${brawler.image}")`,
+      );
+    });
   }
 };
 
