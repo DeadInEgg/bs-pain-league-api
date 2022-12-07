@@ -8,6 +8,7 @@ import { populate } from '../src/seeds/main';
 import { GameResult } from '../src/modules/games/entities/game.entity';
 import { CreateGameDto } from '../src/modules/games/dto/create-game.dto';
 import { UpdateGameDto } from '../src/modules/games/dto/update-game.dto';
+import { connectUser } from './utils';
 
 describe('Games', () => {
   let app: INestApplication;
@@ -65,7 +66,7 @@ describe('Games', () => {
     });
 
     it(`201 - SUCCESS`, async () => {
-      await connectUser();
+      jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
         .post('/games')
@@ -200,15 +201,4 @@ describe('Games', () => {
       expect(response.status).toBe(204);
     });
   });
-
-  const connectUser = async () => {
-    const authResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        mail: 'dark.maxime@mail.com',
-        password: 'Password123!',
-      });
-
-    jwt = authResponse.body.access_token;
-  };
 });

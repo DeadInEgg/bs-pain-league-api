@@ -2,31 +2,22 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
-import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 import { mainConfig } from '../src/main.config';
 import { CreateTrackerDto } from 'src/modules/trackers/dto/create-tracker.dto';
 import dataSource from '../src/data-source';
 import { populate } from '../src/seeds/main';
+import { connectUser } from './utils';
+import { users } from '../src/seeds/user';
+import { trackers } from '../src/seeds/tracker';
 
 describe('Trackers', () => {
   let app: INestApplication;
   let jwt;
   let hash;
 
-  const createFirstUserParams: CreateUserDto = {
-    mail: 'singe@mail.fr',
-    password: 'Password789!',
-    username: 'DarkBolnoix',
-  };
-
-  const createFirstTrackerParams: CreateTrackerDto = {
+  const createTrackerDto: CreateTrackerDto = {
     name: 'Super Tracker',
     tag: 'tagcode123',
-  };
-
-  const createSecondTrackerParams: CreateTrackerDto = {
-    name: 'Mega Super Tracker',
-    tag: 'tagcode456',
   };
 
   beforeAll(async () => {
@@ -41,7 +32,7 @@ describe('Trackers', () => {
     await app.init();
     await dataSource.initialize();
     const queryRunner = dataSource.createQueryRunner();
-    await populate(queryRunner);
+    await populate(queryRunner, ['user', 'tracker']);
   });
 
   afterAll(async () => {
@@ -54,18 +45,18 @@ describe('Trackers', () => {
     it(`401 - ERROR : Not authenticated`, async () => {
       const response = await request(app.getHttpServer())
         .post('/trackers')
-        .send(createFirstTrackerParams);
+        .send(createTrackerDto);
 
       expect(response.status).toBe(401);
     });
 
     it(`201 - SUCCESS`, async () => {
-      await createUserAndLogin();
+      jwt = await connectUser(app, users[1].mail, users[1].password);
 
       const response = await request(app.getHttpServer())
         .post('/trackers')
         .set('Authorization', 'Bearer ' + jwt)
-        .send(createFirstTrackerParams);
+        .send(createTrackerDto);
 
       expect(response.status).toBe(201);
     });
@@ -87,7 +78,7 @@ describe('Trackers', () => {
       const response = await request(app.getHttpServer())
         .post('/trackers')
         .set('Authorization', 'Bearer ' + jwt)
-        .send(createFirstTrackerParams);
+        .send(createTrackerDto);
 
       expect(response.status).toBe(401);
     });
@@ -101,19 +92,16 @@ describe('Trackers', () => {
     });
 
     it(`200 - SUCCESS`, async () => {
-      await createUserAndLogin();
-
-      await createTrackers([
-        createFirstTrackerParams,
-        createSecondTrackerParams,
-      ]);
+      jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
         .get('/trackers')
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
-      expect(response.body.length).toBe(2);
+      expect(response.body.length).toBe(
+        trackers.filter((tracker) => tracker.user === users[0].username).length,
+      );
 
       hash = response.body[0].hash;
     });
@@ -205,30 +193,4 @@ describe('Trackers', () => {
       expect(response.status).toBe(204);
     });
   });
-
-  const createUserAndLogin = async () => {
-    await request(app.getHttpServer())
-      .post('/users')
-      .send(createFirstUserParams);
-
-    const authResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        mail: createFirstUserParams.mail,
-        password: createFirstUserParams.password,
-      });
-
-    jwt = authResponse.body.access_token;
-  };
-
-  const createTrackers = async (trackersDto: CreateTrackerDto[]) => {
-    await Promise.all(
-      trackersDto.map(async (tracker) => {
-        await request(app.getHttpServer())
-          .post('/trackers')
-          .send(tracker)
-          .set('Authorization', 'Bearer ' + jwt);
-      }),
-    );
-  };
 });
