@@ -69,6 +69,9 @@ export class GamesService {
         id: gameId,
       },
       relations: {
+        fighters: {
+          brawler: true,
+        },
         map: true,
         mode: {
           type: true,

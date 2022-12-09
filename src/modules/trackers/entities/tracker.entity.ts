@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '../../users/entities/user.entity';
-import { Game } from '../..//games/entities/game.entity';
+import { Game } from '../../games/entities/game.entity';
 
 @Entity()
 export class Tracker {
