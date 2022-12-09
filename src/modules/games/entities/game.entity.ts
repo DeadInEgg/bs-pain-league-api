@@ -5,12 +5,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Map } from './map.entity';
 import { Mode } from './mode.entity';
-import { ApiHideProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Fighter } from './fighter.entity';
 
 export enum GameResult {
   VICTORY = 'victory',
@@ -48,6 +50,13 @@ export class Game {
   })
   @JoinColumn({ name: 'tracker_id' })
   tracker: Tracker;
+
+  @ApiPropertyOptional()
+  @OneToMany(() => Fighter, (fighter) => fighter.game, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  fighters: Fighter[];
 
   @CreateDateColumn({
     name: 'created_at',
