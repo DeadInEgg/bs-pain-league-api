@@ -8,13 +8,13 @@ const configService = new ConfigService();
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
   host: configService.get('DB_HOST'),
-  port: configService.get('DB_PORT'),
+  port:
+    process.env.NODE_ENV === 'test'
+      ? configService.get('DB_PORT_TEST')
+      : configService.get('DB_PORT'),
   username: configService.get('DB_USERNAME'),
   password: configService.get('DB_PASSWORD'),
-  database:
-    process.env.NODE_ENV === 'test'
-      ? configService.get('DB_DATABASE_TEST')
-      : configService.get('DB_DATABASE'),
+  database: configService.get('DB_DATABASE'),
   synchronize: process.env.NODE_ENV === 'test',
 };
 
