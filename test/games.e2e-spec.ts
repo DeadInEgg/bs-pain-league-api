@@ -9,11 +9,41 @@ import { GameResult } from '../src/modules/games/entities/game.entity';
 import { CreateGameDto } from '../src/modules/games/dto/create-game.dto';
 import { UpdateGameDto } from '../src/modules/games/dto/update-game.dto';
 import { connectUser } from './utils';
+import { HttpService } from '@nestjs/axios';
+import { of } from 'rxjs';
+import { trackers } from '../src/seeds/tracker';
 
 describe('Games', () => {
   let app: INestApplication;
   let jwt;
   let gameId;
+
+  const result = {
+    data: {
+      items: [
+        {
+          event: {
+            mode: 'knockout',
+            map: 'Out in the Open',
+          },
+          battle: {
+            result: 'victory',
+          },
+        },
+        {
+          event: {
+            mode: 'brawlball',
+            map: 'Super Beach',
+          },
+          battle: {
+            result: 'defeat',
+          },
+        },
+      ],
+    },
+  };
+
+  const httpService = { get: () => of(result) };
 
   const createFirstGameParams: CreateGameDto = {
     mapId: 1,
@@ -31,7 +61,10 @@ describe('Games', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(HttpService)
+      .useValue(httpService)
+      .compile();
 
     app = moduleRef.createNestApplication();
 
@@ -199,6 +232,32 @@ describe('Games', () => {
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(204);
+    });
+  });
+
+  describe('GET /games/suggest/:trackerHash', () => {
+    it(`401 - ERROR : Not authenticated`, async () => {
+      const response = await request(app.getHttpServer()).get(
+        `/games/suggest/${trackers[0].hash}`,
+      );
+
+      expect(response.status).toBe(401);
+    });
+
+    it(`200 - SUCCESS`, async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/games/suggest/${trackers[0].hash}`)
+        .set('Authorization', 'Bearer ' + jwt);
+
+      expect(response.status).toBe(200);
+    });
+
+    it(`422 - ERROR : Tag not found`, async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/games/suggest/${trackers[1].hash}`)
+        .set('Authorization', 'Bearer ' + jwt);
+
+      expect(response.status).toBe(422);
     });
   });
 });

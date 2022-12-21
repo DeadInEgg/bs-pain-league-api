@@ -129,11 +129,15 @@ export class GamesService {
     return this.gamesRepository.save(game);
   }
 
-  async findSuggest(gameId: number) {
-    const game = await this.findOneByIdWithTracker(gameId);
-    const tag = game.tracker.tag;
+  async findSuggest(hash: string, userId: number) {
+    const tracker = await this.trackerService.findOneByHashAndUserId(
+      hash,
+      userId,
+    );
 
-    if (null === tag) {
+    const tag = tracker?.tag;
+
+    if (null == tag) {
       throw new MissingTagException();
     }
 
