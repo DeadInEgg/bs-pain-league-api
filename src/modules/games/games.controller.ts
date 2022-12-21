@@ -47,13 +47,18 @@ export class GamesController {
    * Take the tag from the tracker to find games from Brawl Star api.
    */
   @ApiOperation({ summary: 'Get games from Brawl Stars api' })
-  @Get(':id/suggest')
-  async findSuggest(@Param('id') id: string) {
+  @Get('/suggest/:trackerHash')
+  async findSuggest(@Req() request, @Param('trackerHash') trackHash: string) {
     try {
-      return await this.gamesService.findSuggest(+id);
+      return await this.gamesService.findSuggest(trackHash, request.user.id);
     } catch (error) {
       if (error instanceof MissingTagException) {
         throw new HttpException(error.message, HttpStatus.UNPROCESSABLE_ENTITY);
+      } else {
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
     }
   }
