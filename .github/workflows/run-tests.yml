@@ -21,7 +21,7 @@ jobs:
           node-version: 16
 
       - name: Install 👌
-        run: npm run install
+        run: npm install
 
       - name: Lint
         run: npm run lint
@@ -40,9 +40,20 @@ jobs:
           node-version: 16.13.x
           cache: npm
 
+      - name: Start container for testing
+        run: docker-compose up -d --build db_test
+
       - name: Install 👌
-        run: npm run install
+        run: npm install
 
       - name: Tests 🧪
         timeout-minutes: 10
         run: npm run test:e2e
+        env:
+          DB_HOST: 0.0.0.0
+          DB_PORT_TEST: 3308
+          DB_USERNAME: brawler
+          DB_PASSWORD: nerf-edgar-plz
+          DB_DATABASE: pain-league
+          JWT_SECRET: secret
+          JWT_DURATION: '60d'
