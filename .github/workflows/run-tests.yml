@@ -1,0 +1,48 @@
+name: Run tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout 🔔
+        uses: actions/checkout@v3
+
+      - name: Setup Node 🪜
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install 👌
+        run: npm run install
+
+      - name: Lint
+        run: npm run lint
+
+  tests:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout 🔔
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.x
+          cache: npm
+
+      - name: Install 👌
+        run: npm run install
+
+      - name: Tests 🧪
+        timeout-minutes: 10
+        run: npm run test:e2e
