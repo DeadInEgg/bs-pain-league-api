@@ -36,6 +36,7 @@ describe('Games', () => {
   describe('GET /brawlers', () => {
     it(`401 - ERROR : Not authenticated`, async () => {
       const response = await request(app.getHttpServer()).get('/brawlers');
+      console.log('efds');
 
       expect(response.status).toBe(401);
     });
