@@ -76,11 +76,11 @@ export const populate = async (
   }
 
   if (tables.includes('brawler')) {
-    brawlers.forEach(async (brawler) => {
+    for (const brawler of brawlers) {
       await queryRunner.query(
         `INSERT INTO brawler (name, image) VALUES ("${brawler.name}", "${brawler.image}")`,
       );
-    });
+    }
   }
 };
 
