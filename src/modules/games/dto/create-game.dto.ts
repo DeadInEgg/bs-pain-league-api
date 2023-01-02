@@ -1,6 +1,8 @@
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
 import { GameResult } from '../entities/game.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { FighterDto } from './fighter.dto';
 
 export class CreateGameDto {
   @IsEnum(GameResult, {
@@ -18,4 +20,8 @@ export class CreateGameDto {
 
   @IsNotEmpty()
   trackerHash: string;
+
+  @ValidateNested()
+  @Type(() => FighterDto)
+  fighters: FighterDto[];
 }

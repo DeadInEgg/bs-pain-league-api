@@ -11,12 +11,15 @@ import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
 import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
 import { MissingTagException } from '../../exceptions/MissingTagException';
+import { FightersService } from './fighters.service';
+import { Fighter } from './entities/fighter.entity';
 
 @Injectable()
 export class GamesService {
   constructor(
     private readonly httpService: HttpService,
     private readonly trackerService: TrackersService,
+    private readonly fighterService: FightersService,
 
     @InjectRepository(Game)
     private gamesRepository: Repository<Game>,
@@ -119,11 +122,18 @@ export class GamesService {
       throw new ResourceNotFoundException('Tracker not found');
     }
 
+    const fighters: Fighter[] = [];
+
+    for (const fighter of createGameDto.fighters) {
+      fighters.push(await this.fighterService.create(fighter));
+    }
+
     const game = this.gamesRepository.create({
       ...createGameDto,
       map,
       mode,
       tracker,
+      fighters,
     });
 
     return this.gamesRepository.save(game);
