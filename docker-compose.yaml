@@ -12,6 +12,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: brawler
       MYSQL_PASSWORD: nerf-edgar-plz
+      MYSQL_DATABASE: pain-league
     volumes:
       - ./tmp/db:/var/lib/mysql
 
@@ -26,5 +27,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: brawler
       MYSQL_PASSWORD: nerf-edgar-plz
+      MYSQL_DATABASE: pain-league
     volumes:
       - ./tmp/db_test:/var/lib/mysql
