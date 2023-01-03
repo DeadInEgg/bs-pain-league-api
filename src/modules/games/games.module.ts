@@ -7,9 +7,11 @@ import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
 import { Type } from './entities/type.entity';
-import { Fighter } from './entities/fighter.entity';
 import { TrackersModule } from '../trackers/trackers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Fighter } from './entities/fighter.entity';
+import { FightersService } from './fighters.service';
+import { Brawler } from '../brawler/entities/brawler.entity';
 
 @Module({
   imports: [
@@ -24,9 +26,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
     TrackersModule,
-    TypeOrmModule.forFeature([Game, Map, Mode, Type, Fighter]),
+    TypeOrmModule.forFeature([Game, Map, Mode, Type, Fighter, Brawler]),
   ],
   controllers: [GamesController],
-  providers: [GamesService],
+  providers: [GamesService, FightersService],
 })
 export class GamesModule {}

@@ -55,6 +55,7 @@ export class Game {
   @OneToMany(() => Fighter, (fighter) => fighter.game, {
     nullable: true,
     onDelete: 'CASCADE',
+    cascade: true,
   })
   fighters: Fighter[];
 

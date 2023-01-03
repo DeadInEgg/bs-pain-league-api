@@ -12,6 +12,7 @@ import { connectUser } from './utils';
 import { HttpService } from '@nestjs/axios';
 import { of } from 'rxjs';
 import { trackers } from '../src/seeds/tracker';
+import { FighterDto } from '../src/modules/games/dto/fighter.dto';
 
 describe('Games', () => {
   let app: INestApplication;
@@ -45,11 +46,33 @@ describe('Games', () => {
 
   const httpService = { get: () => of(result) };
 
+  const fightersDto: FighterDto[] = [
+    {
+      opponent: true,
+      me: false,
+      brawlerId: 1,
+    },
+    {
+      opponent: false,
+      me: true,
+      brawlerId: 2,
+    },
+  ];
+
+  const fightersDtoWithBrawlerNotFound: FighterDto[] = [
+    {
+      opponent: true,
+      me: false,
+      brawlerId: 9999,
+    },
+  ];
+
   const createFirstGameParams: CreateGameDto = {
     mapId: 1,
     modeId: 1,
     result: GameResult.DEFEAT,
     trackerHash: 'hash123',
+    fighters: fightersDto,
   };
 
   const updateFirstGameParams: UpdateGameDto = {
@@ -80,6 +103,7 @@ describe('Games', () => {
       'tracker',
       'type',
       'user',
+      'brawler',
     ]);
   });
 
@@ -112,6 +136,8 @@ describe('Games', () => {
     });
 
     it(`422 - ERROR : Params not correct`, async () => {
+      jwt = await connectUser(app);
+
       const response = await request(app.getHttpServer())
         .post('/games')
         .set('Authorization', 'Bearer ' + jwt)
@@ -121,12 +147,30 @@ describe('Games', () => {
     });
 
     it(`404 - ERROR : Hash not found`, async () => {
+      jwt = await connectUser(app);
+
       const response = await request(app.getHttpServer())
         .post('/games')
         .set('Authorization', 'Bearer ' + jwt)
         .send({ ...createFirstGameParams, trackerHash: 'incorrectHash' });
 
       expect(response.status).toBe(404);
+    });
+
+    it(`404 - ERROR : Brawler not found`, async () => {
+      jwt = await connectUser(app);
+
+      createFirstGameParams.fighters = fightersDtoWithBrawlerNotFound;
+
+      const response = await request(app.getHttpServer())
+        .post('/games')
+        .set('Authorization', 'Bearer ' + jwt)
+        .send(createFirstGameParams);
+
+      expect(response.status).toBe(404);
+
+      const body = JSON.parse(response.text);
+      expect(body.message).toEqual('Brawler not found');
     });
   });
 
