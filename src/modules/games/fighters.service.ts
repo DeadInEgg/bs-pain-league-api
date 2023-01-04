@@ -29,4 +29,8 @@ export class FightersService {
       brawler,
     });
   }
+
+  async remove(fighters: Fighter[]): Promise<Fighter[]> {
+    return this.fighterRepository.remove(fighters);
+  }
 }

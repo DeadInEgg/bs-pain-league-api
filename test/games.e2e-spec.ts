@@ -79,6 +79,13 @@ describe('Games', () => {
     mapId: 2,
     modeId: 2,
     result: GameResult.VICTORY,
+    fighters: [
+      {
+        opponent: false,
+        me: true,
+        brawlerId: 5,
+      },
+    ],
   };
 
   beforeAll(async () => {
@@ -235,13 +242,29 @@ describe('Games', () => {
       expect(response.status).toBe(422);
     });
 
-    it(`200 - SUCCESS : `, async () => {
+    it(`204 - SUCCESS : `, async () => {
       const response = await request(app.getHttpServer())
         .patch(`/games/${gameId}`)
         .send(updateFirstGameParams)
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(204);
+    });
+
+    it(`404 - ERROR : Brawler not found`, async () => {
+      jwt = await connectUser(app);
+
+      createFirstGameParams.fighters = fightersDtoWithBrawlerNotFound;
+
+      const response = await request(app.getHttpServer())
+        .patch(`/games/${gameId}`)
+        .set('Authorization', 'Bearer ' + jwt)
+        .send(createFirstGameParams);
+
+      expect(response.status).toBe(404);
+
+      const body = JSON.parse(response.text);
+      expect(body.message).toEqual('Brawler not found');
     });
   });
 
