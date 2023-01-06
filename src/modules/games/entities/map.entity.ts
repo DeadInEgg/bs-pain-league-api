@@ -3,10 +3,8 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Game } from './game.entity';
 import { Mode } from './mode.entity';
 
 @Entity()
@@ -16,9 +14,6 @@ export class Map {
 
   @Column()
   name: string;
-
-  @OneToMany(() => Game, (game) => game.map)
-  games: Game[];
 
   @ManyToMany(() => Mode, (mode) => mode.id)
   @JoinTable({

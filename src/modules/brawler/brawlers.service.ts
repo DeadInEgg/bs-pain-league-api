@@ -4,7 +4,7 @@ import { Brawler } from './entities/brawler.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class BrawlerService {
+export class BrawlersService {
   constructor(
     @InjectRepository(Brawler)
     private brawlerRepository: Repository<Brawler>,
