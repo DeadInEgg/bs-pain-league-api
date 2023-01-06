@@ -12,6 +12,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Fighter } from './entities/fighter.entity';
 import { FightersService } from './fighters.service';
 import { Brawler } from '../brawler/entities/brawler.entity';
+import { MapsController } from './maps.controller';
+import { MapsService } from './maps.service';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { Brawler } from '../brawler/entities/brawler.entity';
     TrackersModule,
     TypeOrmModule.forFeature([Game, Map, Mode, Type, Fighter, Brawler]),
   ],
-  controllers: [GamesController],
-  providers: [GamesService, FightersService],
+  controllers: [GamesController, MapsController],
+  providers: [GamesService, FightersService, MapsService],
 })
 export class GamesModule {}

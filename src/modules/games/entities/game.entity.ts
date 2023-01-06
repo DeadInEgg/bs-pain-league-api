@@ -31,9 +31,7 @@ export class Game {
   })
   result: GameResult;
 
-  @ManyToOne(() => Map, (map) => map.games, {
-    nullable: false,
-  })
+  @ManyToOne(() => Map)
   @JoinColumn({ name: 'map_id' })
   map: Map;
 

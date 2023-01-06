@@ -6,9 +6,9 @@ import { mainConfig } from '../src/main.config';
 import dataSource from '../src/data-source';
 import { populate } from '../src/seeds/main';
 import { connectUser } from './utils';
-import { brawlers } from '../src/seeds/brawler';
+import { maps } from '../src/seeds/map';
 
-describe('Brawlers', () => {
+describe('Maps', () => {
   let app: INestApplication;
   let jwt;
 
@@ -24,7 +24,7 @@ describe('Brawlers', () => {
     await app.init();
     await dataSource.initialize();
     const queryRunner = dataSource.createQueryRunner();
-    await populate(queryRunner, ['user', 'brawler']);
+    await populate(queryRunner, ['user', 'map', 'mode']);
   });
 
   afterAll(async () => {
@@ -33,7 +33,7 @@ describe('Brawlers', () => {
     await app.close();
   });
 
-  describe('GET /brawlers', () => {
+  describe('GET /maps', () => {
     it(`401 - ERROR : Not authenticated`, async () => {
       const response = await request(app.getHttpServer()).get('/brawlers');
 
@@ -44,11 +44,11 @@ describe('Brawlers', () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
-        .get('/brawlers')
+        .get('/maps')
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
-      expect(response.body.length).toBe(brawlers.length);
+      expect(response.body.length).toBe(maps.length);
     });
   });
 });

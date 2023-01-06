@@ -6,7 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { GamesModule } from './modules/games/games.module';
 import { dataSourceOptions } from './data-source';
-import { BrawlerModule } from './modules/brawler/brawler.module';
+import { BrawlersModule } from './modules/brawler/brawlers.module';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { BrawlerModule } from './modules/brawler/brawler.module';
     UsersModule,
     AuthModule,
     GamesModule,
-    BrawlerModule,
+    BrawlersModule,
   ],
   controllers: [],
   providers: [],
