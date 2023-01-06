@@ -92,6 +92,7 @@ export class GamesService {
         tracker: {
           user: true,
         },
+        fighters: true,
       },
     });
   }
@@ -158,7 +159,7 @@ export class GamesService {
     );
   }
 
-  async update(userId: number, gameId: number, updateGameDto: UpdateGameDto) {
+  async update(updateGameDto: UpdateGameDto, userId: number, gameId: number) {
     const game = await this.findOneByIdWithTracker(gameId);
 
     if (null === game) {
@@ -194,7 +195,13 @@ export class GamesService {
       game.mode = mode;
     }
 
-    return this.gamesRepository.save({ ...game, ...updateGameDto });
+    const fighters: Fighter[] = [];
+
+    for (const fighter of updateGameDto.fighters) {
+      fighters.push(await this.fighterService.create(fighter));
+    }
+
+    return this.gamesRepository.save({ ...game, ...updateGameDto, fighters });
   }
 
   async remove(userId: number, gameId: number) {

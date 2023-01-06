@@ -87,7 +87,7 @@ export class GamesController {
     @Body() updateGameDto: UpdateGameDto,
   ) {
     try {
-      return await this.gamesService.update(request.user.id, id, updateGameDto);
+      return await this.gamesService.update(updateGameDto, request.user.id, id);
     } catch (error) {
       if (error instanceof ResourceNotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);

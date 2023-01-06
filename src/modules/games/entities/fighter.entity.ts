@@ -20,7 +20,9 @@ export class Fighter {
   @Column()
   me: boolean;
 
-  @ManyToOne(() => Game, (game) => game.fighters)
+  @ManyToOne(() => Game, (game) => game.fighters, {
+    orphanedRowAction: 'delete',
+  })
   game: Game;
 
   @ManyToOne(() => Brawler)
