@@ -201,10 +201,6 @@ export class GamesService {
       fighters.push(await this.fighterService.create(fighter));
     }
 
-    // if (game.fighters.length > 0) {
-    //   await this.fighterService.remove(game.fighters);
-    // }
-
     return this.gamesRepository.save({ ...game, ...updateGameDto, fighters });
   }
 
