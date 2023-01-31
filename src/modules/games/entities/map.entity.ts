@@ -15,7 +15,7 @@ export class Map {
   @Column()
   name: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   image?: string;
 
   @ManyToMany(() => Mode, (mode) => mode.id)

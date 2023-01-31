@@ -39,7 +39,9 @@ export const populate = async (
 
   if (tables.includes('map')) {
     for (const map of maps) {
-      await queryRunner.query(`INSERT INTO map (name, image) VALUES ("${map.name}", "${map.image}")`);
+      await queryRunner.query(
+        `INSERT INTO map (name, image) VALUES ("${map.name}", "${map.image}")`,
+      );
     }
   }
 
