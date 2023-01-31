@@ -4,7 +4,6 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 const tables: Table[] = [
   'map',
   'mode',
-  'maps_modes',
   'type',
   'user',
   'tracker',
