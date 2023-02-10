@@ -40,7 +40,7 @@ export const populate = async (
   if (tables.includes('map')) {
     for (const map of maps) {
       await queryRunner.query(
-        `INSERT INTO map (name, image) VALUES ("${map.name}", "${map.image}")`,
+        `INSERT INTO map (name, image, mode_id) VALUES ("${map.name}", "${map.image}", (SELECT id FROM mode WHERE name = "${map.mode}"))`,
       );
     }
   }

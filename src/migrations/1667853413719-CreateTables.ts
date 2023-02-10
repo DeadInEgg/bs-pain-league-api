@@ -17,13 +17,10 @@ export class CreateTables1667853413719 implements MigrationInterface {
       `CREATE TABLE \`mode\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`type_id\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`map\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`map\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`mode_id\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `CREATE TABLE \`game\` (\`id\` int NOT NULL AUTO_INCREMENT, \`result\` enum ('victory', 'draw', 'defeat') NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`map_id\` int NOT NULL, \`mode_id\` int NOT NULL, \`tracker_id\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
-    );
-    await queryRunner.query(
-      `CREATE TABLE \`maps_modes\` (\`map_id\` int NOT NULL, \`mode_id\` int NOT NULL, INDEX \`IDX_b8ccd3f6bcfae440fd41d87153\` (\`map_id\`), INDEX \`IDX_38b1e304331c29c604febe40b7\` (\`mode_id\`), PRIMARY KEY (\`map_id\`, \`mode_id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `ALTER TABLE \`tracker\` ADD CONSTRAINT \`FK_345b2e5d9a0e81128b016333c82\` FOREIGN KEY (\`user_id\`) REFERENCES \`user\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
@@ -41,10 +38,7 @@ export class CreateTables1667853413719 implements MigrationInterface {
       `ALTER TABLE \`game\` ADD CONSTRAINT \`FK_d985b507b9cd35100747a01964a\` FOREIGN KEY (\`tracker_id\`) REFERENCES \`tracker\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE \`maps_modes\` ADD CONSTRAINT \`FK_b8ccd3f6bcfae440fd41d871536\` FOREIGN KEY (\`map_id\`) REFERENCES \`map\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`maps_modes\` ADD CONSTRAINT \`FK_38b1e304331c29c604febe40b73\` FOREIGN KEY (\`mode_id\`) REFERENCES \`mode\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE`,
+      `ALTER TABLE \`map\` ADD CONSTRAINT \`FK_2e7dabee215ca3be4c6137389a1\` FOREIGN KEY (\`mode_id\`) REFERENCES \`mode\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
   }
 

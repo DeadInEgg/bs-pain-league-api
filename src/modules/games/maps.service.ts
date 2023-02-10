@@ -13,7 +13,7 @@ export class MapsService {
   async findMaps(): Promise<Map[]> {
     return await this.mapRepository.find({
       relations: {
-        modes: {
+        mode: {
           type: true,
         },
       },
