@@ -8,4 +8,7 @@ export const types = [
   {
     name: '3v3',
   },
+  {
+    name: 'pve',
+  },
 ];
