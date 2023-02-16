@@ -1,25 +1,17 @@
 import { QueryRunner } from 'typeorm';
 import { maps } from './map';
 import { modes } from './mode';
-import { modes_maps } from './modes_maps';
 import { trackers } from './tracker';
 import { types } from './type';
 import { users } from './user';
 import { brawlers } from './brawler';
 import * as bcrypt from 'bcrypt';
 
-export type Table =
-  | 'type'
-  | 'mode'
-  | 'map'
-  | 'maps_modes'
-  | 'user'
-  | 'tracker'
-  | 'brawler';
+export type Table = 'type' | 'mode' | 'map' | 'user' | 'tracker' | 'brawler';
 
 export const populate = async (
   queryRunner: QueryRunner,
-  tables: Table[] = ['map', 'mode', 'maps_modes', 'type', 'brawler'],
+  tables: Table[] = ['map', 'mode', 'type', 'brawler'],
 ) => {
   if (tables.includes('type')) {
     for (const type of types) {
@@ -41,14 +33,6 @@ export const populate = async (
     for (const map of maps) {
       await queryRunner.query(
         `INSERT INTO map (name, image, mode_id) VALUES ("${map.name}", "${map.image}", (SELECT id FROM mode WHERE name = "${map.mode}"))`,
-      );
-    }
-  }
-
-  if (tables.includes('maps_modes')) {
-    for (const mode_map of modes_maps) {
-      await queryRunner.query(
-        `INSERT INTO maps_modes (map_id, mode_id) VALUES ((SELECT id FROM map WHERE name = "${mode_map.name}"), (SELECT id FROM mode WHERE name = "${mode_map.mode}"))`,
       );
     }
   }
