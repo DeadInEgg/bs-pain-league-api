@@ -44,12 +44,6 @@ export class CreateTables1667853413719 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`maps_modes\` DROP FOREIGN KEY \`FK_38b1e304331c29c604febe40b73\``,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`maps_modes\` DROP FOREIGN KEY \`FK_b8ccd3f6bcfae440fd41d871536\``,
-    );
-    await queryRunner.query(
       `ALTER TABLE \`game\` DROP FOREIGN KEY \`FK_d985b507b9cd35100747a01964a\``,
     );
     await queryRunner.query(
@@ -64,13 +58,6 @@ export class CreateTables1667853413719 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE \`tracker\` DROP FOREIGN KEY \`FK_345b2e5d9a0e81128b016333c82\``,
     );
-    await queryRunner.query(
-      `DROP INDEX \`IDX_38b1e304331c29c604febe40b7\` ON \`maps_modes\``,
-    );
-    await queryRunner.query(
-      `DROP INDEX \`IDX_b8ccd3f6bcfae440fd41d87153\` ON \`maps_modes\``,
-    );
-    await queryRunner.query(`DROP TABLE \`maps_modes\``);
     await queryRunner.query(`DROP TABLE \`game\``);
     await queryRunner.query(`DROP TABLE \`map\``);
     await queryRunner.query(`DROP TABLE \`mode\``);

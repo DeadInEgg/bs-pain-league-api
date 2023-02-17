@@ -105,7 +105,6 @@ describe('Games', () => {
     const queryRunner = dataSource.createQueryRunner();
     await populate(queryRunner, [
       'map',
-      // 'maps_modes',
       'mode',
       'tracker',
       'type',
