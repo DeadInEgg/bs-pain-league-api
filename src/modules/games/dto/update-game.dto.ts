@@ -16,10 +16,6 @@ export class UpdateGameDto {
   @IsOptional()
   mapId: number;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  modeId: number;
-
   @ValidateNested()
   @Type(() => FighterDto)
   fighters: FighterDto[] = [];

@@ -43,8 +43,9 @@ export class TrackersService {
       },
       relations: {
         games: {
-          mode: true,
-          map: true,
+          map: {
+            mode: true,
+          },
         },
       },
     });

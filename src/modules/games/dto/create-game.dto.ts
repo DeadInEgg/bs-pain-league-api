@@ -16,9 +16,6 @@ export class CreateGameDto {
   mapId: number;
 
   @IsNotEmpty()
-  modeId: number;
-
-  @IsNotEmpty()
   trackerHash: string;
 
   @ValidateNested()
