@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrackersService } from '../trackers/trackers.service';
 import { firstValueFrom, map } from 'rxjs';
@@ -9,8 +9,6 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
 import { Mode } from './entities/mode.entity';
-import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
-import { MissingTagException } from '../../exceptions/MissingTagException';
 import { FightersService } from './fighters.service';
 import { Fighter } from './entities/fighter.entity';
 
@@ -55,19 +53,19 @@ export class GamesService {
     return games;
   }
 
-  async findOneById(userId: number, gameId: number) {
+  async findOneById(userId: number, gameId: number): Promise<Game> {
     const game = await this.findOneByIdWithTracker(gameId);
 
     if (null === game) {
-      throw new ResourceNotFoundException('Game not found');
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
     }
 
     /* Current user is not allowed to see the game */
     if (userId !== game.tracker.user.id) {
-      throw new ResourceNotFoundException('Game not found');
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
     }
 
-    return await this.gamesRepository.findOne({
+    return this.gamesRepository.findOne({
       where: {
         id: gameId,
       },
@@ -84,7 +82,7 @@ export class GamesService {
   }
 
   async findOneByIdWithTracker(gameId: number): Promise<Game> {
-    return await this.gamesRepository.findOne({
+    return this.gamesRepository.findOne({
       where: {
         id: gameId,
       },
@@ -97,13 +95,13 @@ export class GamesService {
     });
   }
 
-  async create(createGameDto: CreateGameDto, userId: number) {
+  async create(createGameDto: CreateGameDto, userId: number): Promise<Game> {
     const map = await this.mapsRepository.findOneBy({
       id: createGameDto.mapId,
     });
 
     if (null === map) {
-      throw new ResourceNotFoundException('Map not found');
+      throw new HttpException('Map not found', HttpStatus.NOT_FOUND);
     }
 
     const mode = await this.modesRepository.findOneBy({
@@ -111,7 +109,7 @@ export class GamesService {
     });
 
     if (null === mode) {
-      throw new ResourceNotFoundException('Mode not found');
+      throw new HttpException('Mode not found', HttpStatus.NOT_FOUND);
     }
 
     const tracker = await this.trackerService.findOneByHashAndUserId(
@@ -120,7 +118,7 @@ export class GamesService {
     );
 
     if (null === tracker) {
-      throw new ResourceNotFoundException('Tracker not found');
+      throw new HttpException('Tracker not found', HttpStatus.NOT_FOUND);
     }
 
     const fighters: Fighter[] = [];
@@ -140,7 +138,7 @@ export class GamesService {
     return this.gamesRepository.save(game);
   }
 
-  async findSuggest(hash: string, userId: number) {
+  async findSuggest(hash: string, userId: number): Promise<Game[]> {
     const tracker = await this.trackerService.findOneByHashAndUserId(
       hash,
       userId,
@@ -149,26 +147,30 @@ export class GamesService {
     const tag = tracker?.tag;
 
     if (null == tag) {
-      throw new MissingTagException();
+      throw new HttpException('Tag required', HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    return await firstValueFrom(
+    return firstValueFrom(
       this.httpService
         .get(`/players/%23${tag}/battlelog`)
         .pipe(map((response) => this.parseOnGames(response.data))),
     );
   }
 
-  async update(updateGameDto: UpdateGameDto, userId: number, gameId: number) {
+  async update(
+    updateGameDto: UpdateGameDto,
+    userId: number,
+    gameId: number,
+  ): Promise<Game> {
     const game = await this.findOneByIdWithTracker(gameId);
 
     if (null === game) {
-      throw new ResourceNotFoundException('Game not found');
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
     }
 
     /* Current user is not allowed to remove the game */
     if (userId !== game.tracker.user.id) {
-      throw new ResourceNotFoundException('Game not found');
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
     }
 
     if (updateGameDto.mapId) {
@@ -177,7 +179,7 @@ export class GamesService {
       });
 
       if (null === map) {
-        throw new ResourceNotFoundException('Map not found');
+        throw new HttpException('Map not found', HttpStatus.NOT_FOUND);
       }
 
       game.map = map;
@@ -189,7 +191,7 @@ export class GamesService {
       });
 
       if (null === mode) {
-        throw new ResourceNotFoundException('Mode not found');
+        throw new HttpException('Mode not found', HttpStatus.NOT_FOUND);
       }
 
       game.mode = mode;
@@ -204,18 +206,18 @@ export class GamesService {
     return this.gamesRepository.save({ ...game, ...updateGameDto, fighters });
   }
 
-  async remove(userId: number, gameId: number) {
+  async remove(userId: number, gameId: number): Promise<Game> {
     const game = await this.findOneByIdWithTracker(gameId);
 
     if (null === game) {
-      throw new ResourceNotFoundException('Game not found');
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
     }
 
     /* Current user is not allowed to remove the game */
     if (userId !== game.tracker.user.id) {
-      throw new ResourceNotFoundException('Game not found');
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
     }
 
-    return await this.gamesRepository.remove(game);
+    return this.gamesRepository.remove(game);
   }
 }

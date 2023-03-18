@@ -13,7 +13,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  create(createUserDto: CreateUserDto): Promise<User> {
     createUserDto.password = this.encryptPassword(createUserDto.password);
     const user = this.usersRepository.create(createUserDto);
 
@@ -25,11 +25,11 @@ export class UsersService {
   }
 
   async findOneByMail(mail: string): Promise<User> {
-    return await this.usersRepository.findOneBy({ mail });
+    return this.usersRepository.findOneBy({ mail });
   }
 
   async update(user: User, updateUserDto: UpdateUserDto): Promise<User> {
-    return await this.usersRepository.save({
+    return this.usersRepository.save({
       ...user,
       ...updateUserDto,
     });
@@ -37,11 +37,11 @@ export class UsersService {
 
   async updatePassword(user: User, newPassword: string): Promise<User> {
     user.password = this.encryptPassword(newPassword);
-    return await this.usersRepository.save(user);
+    return this.usersRepository.save(user);
   }
 
   async remove(user: User): Promise<User> {
-    return await this.usersRepository.remove(user);
+    return this.usersRepository.remove(user);
   }
 
   encryptPassword(password: string): string {
@@ -52,6 +52,6 @@ export class UsersService {
     password1: string,
     password2: string,
   ): Promise<boolean> {
-    return await bcrypt.compare(password1, password2);
+    return bcrypt.compare(password1, password2);
   }
 }

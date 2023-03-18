@@ -52,8 +52,6 @@ export class Game {
   @ApiPropertyOptional()
   @OneToMany(() => Fighter, (fighter) => fighter.game, {
     nullable: true,
-    onDelete: 'CASCADE',
-    cascade: true,
   })
   fighters: Fighter[];
 

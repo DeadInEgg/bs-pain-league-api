@@ -19,7 +19,7 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req, @Response() res) {
+  async login(@Request() req, @Response() res): Promise<void> {
     const token = await this.authService.login(req.user);
     res.cookie('accessToken', token.access_token, {
       expires: new Date(new Date().getTime() + 30 * 1000),
@@ -30,7 +30,7 @@ export class AuthController {
   }
 
   @Get('logout')
-  async logout(@Response({ passthrough: true }) res) {
+  async logout(@Response({ passthrough: true }) res): Promise<void> {
     res.cookie('accessToken', '', { expires: new Date() });
   }
 }
