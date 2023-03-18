@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MapsService } from './maps.service';
+import { Map } from './entities/map.entity';
 
 @ApiBearerAuth()
 @ApiTags('Maps')
@@ -10,7 +11,7 @@ export class MapsController {
 
   @ApiOperation({ summary: 'Get a list of available maps' })
   @Get()
-  async getMaps() {
-    return await this.mapsService.findMaps();
+  async getMaps(): Promise<Map[]> {
+    return this.mapsService.findMaps();
   }
 }

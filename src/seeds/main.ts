@@ -12,7 +12,7 @@ export type Table = 'type' | 'mode' | 'map' | 'user' | 'tracker' | 'brawler';
 export const populate = async (
   queryRunner: QueryRunner,
   tables: Table[] = ['map', 'mode', 'type', 'brawler'],
-) => {
+): Promise<void> => {
   if (tables.includes('type')) {
     for (const type of types) {
       await queryRunner.query(
@@ -70,7 +70,10 @@ export const populate = async (
   }
 };
 
-export const clean = async (queryRunner: QueryRunner, tables: Table[]) => {
+export const clean = async (
+  queryRunner: QueryRunner,
+  tables: Table[],
+): Promise<void> => {
   for (const table of tables) {
     await queryRunner.query(`DELETE FROM ${table}`);
   }

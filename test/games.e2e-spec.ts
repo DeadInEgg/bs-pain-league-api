@@ -10,7 +10,7 @@ import { CreateGameDto } from '../src/modules/games/dto/create-game.dto';
 import { UpdateGameDto } from '../src/modules/games/dto/update-game.dto';
 import { connectUser } from './utils';
 import { HttpService } from '@nestjs/axios';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { trackers } from '../src/seeds/tracker';
 import { FighterDto } from '../src/modules/games/dto/fighter.dto';
 
@@ -44,7 +44,9 @@ describe('Games', () => {
     },
   };
 
-  const httpService = { get: () => of(result) };
+  const httpService = {
+    get: (): Observable<Record<string, unknown>> => of(result),
+  };
 
   const fightersDto: FighterDto[] = [
     {
