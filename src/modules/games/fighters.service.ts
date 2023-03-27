@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FighterDto } from './dto/fighter.dto';
 import { Brawler } from '../brawler/entities/brawler.entity';
 import { Repository } from 'typeorm';
-import { ResourceNotFoundException } from '../../exceptions/ResourceNotFoundException';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Fighter } from './entities/fighter.entity';
 
@@ -21,7 +20,7 @@ export class FightersService {
     });
 
     if (null === brawler) {
-      throw new ResourceNotFoundException('Brawler not found');
+      throw new HttpException('Brawler not found', HttpStatus.NOT_FOUND);
     }
 
     return this.fighterRepository.create({

@@ -13,17 +13,20 @@ export class TrackersService {
     private trackersRepository: Repository<Tracker>,
   ) {}
 
-  async create(createTrackerDto: CreateTrackerDto, user: User) {
+  async create(
+    createTrackerDto: CreateTrackerDto,
+    user: User,
+  ): Promise<Tracker> {
     const tracker = await this.trackersRepository.create({
       ...createTrackerDto,
       user,
     });
 
-    return await this.trackersRepository.save(tracker);
+    return this.trackersRepository.save(tracker);
   }
 
   async findByUserId(id: number): Promise<Tracker[]> {
-    return await this.trackersRepository.findBy({
+    return this.trackersRepository.findBy({
       user: {
         id,
       },
@@ -34,7 +37,7 @@ export class TrackersService {
     hash: string,
     userId: number,
   ): Promise<Tracker> {
-    return await this.trackersRepository.findOne({
+    return this.trackersRepository.findOne({
       where: {
         hash,
         user: {
@@ -51,8 +54,11 @@ export class TrackersService {
     });
   }
 
-  async findOneByHashAndUserId(hash: string, userId: number): Promise<Tracker> {
-    return await this.trackersRepository.findOne({
+  async findOneByHashAndUserId(
+    hash: string,
+    userId: number,
+  ): Promise<Tracker | null> {
+    return this.trackersRepository.findOne({
       where: {
         hash,
         user: {
@@ -66,13 +72,13 @@ export class TrackersService {
     tracker: Tracker,
     updateTrackerDto: UpdateTrackerDto,
   ): Promise<Tracker> {
-    return await this.trackersRepository.save({
+    return this.trackersRepository.save({
       ...tracker,
       ...updateTrackerDto,
     });
   }
 
   async remove(tracker: Tracker): Promise<Tracker> {
-    return await this.trackersRepository.remove(tracker);
+    return this.trackersRepository.remove(tracker);
   }
 }

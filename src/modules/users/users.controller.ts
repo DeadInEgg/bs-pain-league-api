@@ -24,6 +24,7 @@ import {
   ApiNoContentResponse,
 } from '@nestjs/swagger';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { User } from './entities/user.entity';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('Users')
@@ -34,7 +35,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Create a user' })
   @Public()
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     const user = await this.usersService.findOneByMail(createUserDto.mail);
 
     if (user) {
@@ -51,7 +52,7 @@ export class UsersController {
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiBearerAuth()
   @Get('/me')
-  async findOne(@Req() request) {
+  async findOne(@Req() request): Promise<User> {
     const user = await this.usersService.findOneById(request.user.id);
 
     if (null === user) {
@@ -67,7 +68,10 @@ export class UsersController {
   @ApiNoContentResponse({ description: 'User updated successfully' })
   @HttpCode(204)
   @Patch('/me')
-  async update(@Req() request, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Req() request,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
     const user = await this.usersService.findOneById(request.user.id);
 
     if (null === user) {
@@ -97,7 +101,7 @@ export class UsersController {
   async updatePassword(
     @Req() request,
     @Body() updatePasswordDto: UpdatePasswordDto,
-  ) {
+  ): Promise<User> {
     const user = await this.usersService.findOneById(request.user.id);
 
     if (null === user) {
@@ -116,7 +120,10 @@ export class UsersController {
       );
     }
 
-    await this.usersService.updatePassword(user, updatePasswordDto.newPassword);
+    return this.usersService.updatePassword(
+      user,
+      updatePasswordDto.newPassword,
+    );
   }
 
   @ApiOperation({ summary: 'Remove current user' })
@@ -124,13 +131,13 @@ export class UsersController {
   @ApiBearerAuth()
   @HttpCode(204)
   @Delete('/me')
-  async remove(@Req() request) {
+  async remove(@Req() request): Promise<User> {
     const user = await this.usersService.findOneById(request.user.id);
 
     if (null === user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    await this.usersService.remove(user);
+    return this.usersService.remove(user);
   }
 }

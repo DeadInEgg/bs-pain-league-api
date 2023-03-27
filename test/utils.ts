@@ -6,7 +6,7 @@ export const connectUser = async (
   app: INestApplication,
   mail = users[0].mail,
   password = users[0].password,
-) => {
+): Promise<string> => {
   const authResponse = await request(app.getHttpServer())
     .post('/auth/login')
     .send({

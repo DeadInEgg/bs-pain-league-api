@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BrawlersService } from './brawlers.service';
+import { Brawler } from './entities/brawler.entity';
 
 @ApiBearerAuth()
 @ApiTags('Brawlers')
@@ -10,7 +11,7 @@ export class BrawlersController {
 
   @ApiOperation({ summary: 'Get a list of available brawlers' })
   @Get()
-  async getBrawlers() {
-    return await this.brawlerService.findBrawlers();
+  async getBrawlers(): Promise<Brawler[]> {
+    return this.brawlerService.findBrawlers();
   }
 }
