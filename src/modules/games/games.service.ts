@@ -41,12 +41,9 @@ export class GamesService {
         game.map = await this.mapsRepository.findOneBy({
           name: item.event.map,
         });
-        game.mode = await this.modesRepository.findOneBy({
-          name: item.event.mode,
-        });
         game.result = item.battle.result;
 
-        if (game.mode && game.map) {
+        if (game.map) {
           games.push(game);
         }
       }),
@@ -75,9 +72,10 @@ export class GamesService {
         fighters: {
           brawler: true,
         },
-        map: true,
-        mode: {
-          type: true,
+        map: {
+          mode: {
+            type: true,
+          },
         },
       },
     });
@@ -106,14 +104,6 @@ export class GamesService {
       throw new ResourceNotFoundException('Map not found');
     }
 
-    const mode = await this.modesRepository.findOneBy({
-      id: createGameDto.modeId,
-    });
-
-    if (null === mode) {
-      throw new ResourceNotFoundException('Mode not found');
-    }
-
     const tracker = await this.trackerService.findOneByHashAndUserId(
       createGameDto.trackerHash,
       userId,
@@ -132,7 +122,6 @@ export class GamesService {
     const game = this.gamesRepository.create({
       ...createGameDto,
       map,
-      mode,
       tracker,
       fighters,
     });
@@ -181,18 +170,6 @@ export class GamesService {
       }
 
       game.map = map;
-    }
-
-    if (updateGameDto.modeId) {
-      const mode = await this.modesRepository.findOneBy({
-        id: updateGameDto.modeId,
-      });
-
-      if (null === mode) {
-        throw new ResourceNotFoundException('Mode not found');
-      }
-
-      game.mode = mode;
     }
 
     const fighters: Fighter[] = [];

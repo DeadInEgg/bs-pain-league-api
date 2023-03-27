@@ -69,7 +69,6 @@ describe('Games', () => {
 
   const createFirstGameParams: CreateGameDto = {
     mapId: 1,
-    modeId: 1,
     result: GameResult.DEFEAT,
     trackerHash: 'hash123',
     fighters: fightersDto,
@@ -77,7 +76,6 @@ describe('Games', () => {
 
   const updateFirstGameParams: UpdateGameDto = {
     mapId: 2,
-    modeId: 2,
     result: GameResult.VICTORY,
     fighters: [
       {

@@ -10,7 +10,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Map } from './map.entity';
-import { Mode } from './mode.entity';
 import { ApiHideProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Fighter } from './fighter.entity';
 
@@ -34,12 +33,6 @@ export class Game {
   @ManyToOne(() => Map)
   @JoinColumn({ name: 'map_id' })
   map: Map;
-
-  @ManyToOne(() => Mode, (mode) => mode.games, {
-    nullable: false,
-  })
-  @JoinColumn({ name: 'mode_id' })
-  mode: Mode;
 
   @ApiHideProperty()
   @ManyToOne(() => Tracker, (tracker) => tracker.games, {

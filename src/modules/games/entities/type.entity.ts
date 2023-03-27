@@ -1,6 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Mode } from './mode.entity';
-import { ApiHideProperty } from '@nestjs/swagger';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Type {
@@ -9,8 +7,4 @@ export class Type {
 
   @Column()
   name: string;
-
-  @ApiHideProperty()
-  @OneToMany(() => Mode, (mode) => mode.games)
-  modes: Mode[];
 }
