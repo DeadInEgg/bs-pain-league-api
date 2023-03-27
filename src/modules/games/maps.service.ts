@@ -10,11 +10,22 @@ export class MapsService {
     private mapRepository: Repository<Map>,
   ) {}
 
-  async findMaps(): Promise<Map[]> {
-    return await this.mapRepository.find({
+  async findMaps(
+    isActive?: boolean,
+    isOnPowerLeagueSeason?: boolean,
+    mode?: string,
+  ): Promise<Map[]> {
+    return this.mapRepository.find({
       relations: {
         mode: {
           type: true,
+        },
+      },
+      where: {
+        isActive,
+        isOnPowerLeagueSeason,
+        mode: {
+          name: mode,
         },
       },
     });

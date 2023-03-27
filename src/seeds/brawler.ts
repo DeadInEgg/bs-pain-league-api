@@ -1,192 +1,192 @@
 export const brawlers = [
   {
     name: 'Buster',
-    image: 'https://cdn-old.brawlify.com/brawler/Buster.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Buster.png',
   },
   {
     name: 'Gus',
-    image: 'https://cdn-old.brawlify.com/brawler/Gus.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Gus.png',
   },
   {
     name: 'Sam',
-    image: 'https://cdn-old.brawlify.com/brawler/Sam.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Sam.png',
   },
   {
     name: 'Otis',
-    image: 'https://cdn-old.brawlify.com/brawler/Otis.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Otis.png',
   },
   {
     name: 'Bonnie',
-    image: 'https://cdn-old.brawlify.com/brawler/Bonnie.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Bonnie.png',
   },
   {
     name: 'Janet',
-    image: 'https://cdn-old.brawlify.com/brawler/Janet.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Janet.png',
   },
   {
     name: 'Eve',
-    image: 'https://cdn-old.brawlify.com/brawler/Eve.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Eve.png',
   },
   {
     name: 'Fang',
-    image: 'https://cdn-old.brawlify.com/brawler/Fang.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Fang.png',
   },
   {
     name: 'Lola',
-    image: 'https://cdn-old.brawlify.com/brawler/Lola.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Lola.png',
   },
   {
     name: 'Meg',
-    image: 'https://cdn-old.brawlify.com/brawler/Meg.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Meg.png',
   },
   {
     name: 'Ash',
-    image: 'https://cdn-old.brawlify.com/brawler/Ash.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Ash.png',
   },
   {
     name: 'Griff',
-    image: 'https://cdn-old.brawlify.com/brawler/Griff.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Griff.png',
   },
   {
     name: 'Buzz',
-    image: 'https://cdn-old.brawlify.com/brawler/Buzz.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Buzz.png',
   },
   {
     name: 'Grom',
-    image: 'https://cdn-old.brawlify.com/brawler/Grom.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Grom.png',
   },
   {
     name: 'Squeak',
-    image: 'https://cdn-old.brawlify.com/brawler/Squeak.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Squeak.png',
   },
   {
     name: 'Belle',
-    image: 'https://cdn-old.brawlify.com/brawler/Belle.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Belle.png',
   },
   {
     name: 'Stu',
-    image: 'https://cdn-old.brawlify.com/brawler/Stu.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Stu.png',
   },
   {
     name: 'Ruffs',
-    image: 'https://cdn-old.brawlify.com/brawler/Ruffs.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Ruffs.png',
   },
   {
     name: 'Edgar',
-    image: 'https://cdn-old.brawlify.com/brawler/Edgar.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Edgar.png',
   },
   {
     name: 'Byron',
-    image: 'https://cdn-old.brawlify.com/brawler/Byron.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Byron.png',
   },
   {
     name: 'Lou',
-    image: 'https://cdn-old.brawlify.com/brawler/Lou.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Lou.png',
   },
   {
     name: 'Amber',
-    image: 'https://cdn-old.brawlify.com/brawler/Amber.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Amber.png',
   },
   {
     name: 'Colette',
-    image: 'https://cdn-old.brawlify.com/brawler/Colette.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Colette.png',
   },
   {
     name: 'Surge',
-    image: 'https://cdn-old.brawlify.com/brawler/Surge.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Surge.png',
   },
   {
     name: 'Sprout',
-    image: 'https://cdn-old.brawlify.com/brawler/Sprout.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Sprout.png',
   },
   {
     name: 'Nani',
-    image: 'https://cdn-old.brawlify.com/brawler/Nani.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Nani.png',
   },
   {
     name: 'Gale',
-    image: 'https://cdn-old.brawlify.com/brawler/Gale.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Gale.png',
   },
   {
     name: 'Jacky',
-    image: 'https://cdn-old.brawlify.com/brawler/Jacky.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Jacky.png',
   },
   {
     name: 'Max',
-    image: 'https://cdn-old.brawlify.com/brawler/Max.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Max.png',
   },
   {
     name: 'Mr. P',
-    image: 'https://cdn-old.brawlify.com/brawler/Mr-P.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Mr-P.png',
   },
   {
     name: 'Emz',
-    image: 'https://cdn-old.brawlify.com/brawler/Emz.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Emz.png',
   },
   {
     name: 'Bea',
-    image: 'https://cdn-old.brawlify.com/brawler/Bea.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Bea.png',
   },
   {
     name: 'Sandy',
-    image: 'https://cdn-old.brawlify.com/brawler/Sandy.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Sandy.png',
   },
   {
     name: '8-Bit',
-    image: 'https://cdn-old.brawlify.com/brawler/8-Bit.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/8-Bit.png',
   },
   {
     name: 'Bibi',
-    image: 'https://cdn-old.brawlify.com/brawler/Bibi.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Bibi.png',
   },
   {
     name: 'Carl',
-    image: 'https://cdn-old.brawlify.com/brawler/Carl.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Carl.png',
   },
   {
     name: 'Rosa',
-    image: 'https://cdn-old.brawlify.com/brawler/Rosa.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Rosa.png',
   },
   {
     name: 'Leon',
-    image: 'https://cdn-old.brawlify.com/brawler/Leon.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Leon.png',
   },
   {
     name: 'Tick',
-    image: 'https://cdn-old.brawlify.com/brawler/Tick.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Tick.png',
   },
   {
     name: 'Gene',
-    image: 'https://cdn-old.brawlify.com/brawler/Gene.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Gene.png',
   },
   {
     name: 'Frank',
-    image: 'https://cdn-old.brawlify.com/brawler/Frank.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Frank.png',
   },
   {
     name: 'Penny',
-    image: 'https://cdn-old.brawlify.com/brawler/Penny.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Penny.png',
   },
   {
     name: 'Darryl',
-    image: 'https://cdn-old.brawlify.com/brawler/Darryl.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Darryl.png',
   },
   {
     name: 'Tara',
-    image: 'https://cdn-old.brawlify.com/brawler/Tara.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Tara.png',
   },
   {
     name: 'Pam',
-    image: 'https://cdn-old.brawlify.com/brawler/Pam.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Pam.png',
   },
   {
     name: 'Piper',
-    image: 'https://cdn-old.brawlify.com/brawler/Piper.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Piper.png',
   },
-  { name: 'Bo', image: 'https://cdn-old.brawlify.com/brawler/Bo.png' },
+  { name: 'Bo', image: 'https://cdn-old.brawlify.com/brawler-bs/Bo.png' },
   {
     name: 'Poco',
-    image: 'https://cdn-old.brawlify.com/brawler/Poco.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Poco.png',
   },
   {
     name: 'Crow',

@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { MapsService } from './maps.service';
 import { Map } from './entities/map.entity';
+import { GetMapsDto } from './dto/get-maps.dto';
 
 @ApiBearerAuth()
 @ApiTags('Maps')
@@ -11,7 +12,9 @@ export class MapsController {
 
   @ApiOperation({ summary: 'Get a list of available maps' })
   @Get()
-  async getMaps(): Promise<Map[]> {
-    return this.mapsService.findMaps();
+  async getMaps(
+    @Query() { isActive, isOnPowerLeagueSeason, mode }: GetMapsDto,
+  ): Promise<Map[]> {
+    return this.mapsService.findMaps(isActive, isOnPowerLeagueSeason, mode);
   }
 }

@@ -18,6 +18,12 @@ export class Map {
   @Column({ nullable: true })
   image?: string;
 
+  @Column({ default: false })
+  isActive: boolean;
+
+  @Column({ default: false })
+  isOnPowerLeagueSeason: boolean;
+
   @ManyToOne(() => Mode)
   @JoinColumn({ name: 'mode_id' })
   mode: Mode;
