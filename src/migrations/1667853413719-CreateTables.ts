@@ -14,10 +14,10 @@ export class CreateTables1667853413719 implements MigrationInterface {
       `CREATE TABLE \`type\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`mode\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`type_id\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`mode\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`image\` varchar(255) NOT NULL, \`isActive\` tinyint NOT NULL DEFAULT 0, \`type_id\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`map\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`mode_id\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`map\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`image\` varchar(255) NULL, \`isActive\` tinyint NOT NULL DEFAULT 0, \`isOnPowerLeagueSeason\` tinyint NOT NULL DEFAULT 0, \`mode_id\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `CREATE TABLE \`game\` (\`id\` int NOT NULL AUTO_INCREMENT, \`result\` enum ('victory', 'draw', 'defeat') NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updated_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`map_id\` int NOT NULL, \`mode_id\` int NOT NULL, \`tracker_id\` int NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,

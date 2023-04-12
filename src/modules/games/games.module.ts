@@ -14,6 +14,8 @@ import { FightersService } from './fighters.service';
 import { Brawler } from '../brawler/entities/brawler.entity';
 import { MapsController } from './maps.controller';
 import { MapsService } from './maps.service';
+import { ModesService } from './modes.services';
+import { ModesController } from './modes.controller';
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import { MapsService } from './maps.service';
     TrackersModule,
     TypeOrmModule.forFeature([Game, Map, Mode, Type, Fighter, Brawler]),
   ],
-  controllers: [GamesController, MapsController],
-  providers: [GamesService, FightersService, MapsService],
+  controllers: [GamesController, MapsController, ModesController],
+  providers: [GamesService, FightersService, MapsService, ModesService],
 })
 export class GamesModule {}

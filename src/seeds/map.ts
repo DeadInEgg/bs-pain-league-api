@@ -1,13 +1,9 @@
 export const maps = [
   {
-    name: 'Last Stand',
-    image: 'https://cdn-old.brawlify.com/map/15000322.png',
-    mode: 'Robo Rumble',
-  },
-  {
     name: 'Center Stage',
     image: 'https://cdn-old.brawlify.com/map/15000132.png',
     mode: 'Brawl Ball',
+    isOnPowerLeagueSeason: true,
   },
   {
     name: 'Dark Passage',
@@ -18,11 +14,13 @@ export const maps = [
     name: 'Crystal Arcade',
     image: 'https://cdn-old.brawlify.com/map/15000008.png',
     mode: 'Gem Grab',
+    isActive: true,
   },
   {
     name: 'New Perspective',
     image: 'https://cdn-old.brawlify.com/map/15000528.png',
     mode: 'Knockout',
+    isActive: true,
   },
   {
     name: 'Dark Passage',
@@ -83,11 +81,6 @@ export const maps = [
     name: 'Monkey Maze',
     image: 'https://cdn-old.brawlify.com/map/15000468.png',
     mode: 'Duels',
-  },
-  {
-    name: 'Lit Match',
-    image: 'https://cdn-old.brawlify.com/map/15000324.png',
-    mode: 'Big Game',
   },
   {
     name: 'Warriors Way',
@@ -305,11 +298,6 @@ export const maps = [
     mode: 'Duels',
   },
   {
-    name: 'Metal Scrap',
-    image: 'https://cdn-old.brawlify.com/map/15000067.png',
-    mode: 'Boss Fight',
-  },
-  {
     name: 'Belles Rock',
     image: 'https://cdn-old.brawlify.com/map/15000368.png',
     mode: 'Knockout',
@@ -385,19 +373,9 @@ export const maps = [
     mode: 'Basket Brawl',
   },
   {
-    name: 'Open Season',
-    image: 'https://cdn-old.brawlify.com/map/15000323.png',
-    mode: 'Big Game',
-  },
-  {
     name: 'Hotheaded',
     image: 'https://cdn-old.brawlify.com/map/15000575.png',
     mode: 'Duels',
-  },
-  {
-    name: 'Full On',
-    image: 'https://cdn-old.brawlify.com/map/15000321.png',
-    mode: 'Robo Rumble',
   },
   {
     name: 'Wicked Twig',
@@ -428,11 +406,6 @@ export const maps = [
     name: 'Infinite Doom',
     image: 'https://cdn-old.brawlify.com/map/15000471.png',
     mode: 'Wipeout',
-  },
-  {
-    name: 'Danger Zone',
-    image: 'https://cdn-old.brawlify.com/map/15000133.png',
-    mode: 'Boss Fight',
   },
   {
     name: 'Quad Damage',
@@ -590,11 +563,6 @@ export const maps = [
     mode: 'Knockout',
   },
   {
-    name: 'Rise Of The Robots',
-    image: 'https://cdn-old.brawlify.com/map/15000563.png',
-    mode: 'Last Stand',
-  },
-  {
     name: 'Deeper Danger',
     image: 'https://cdn-old.brawlify.com/map/15000218.png',
     mode: 'Bounty',
@@ -623,16 +591,6 @@ export const maps = [
     name: 'Side By Side',
     image: 'https://cdn-old.brawlify.com/map/15000554.png',
     mode: 'Bounty',
-  },
-  {
-    name: 'The Eliminator',
-    image: 'https://cdn-old.brawlify.com/map/15000561.png',
-    mode: 'Last Stand',
-  },
-  {
-    name: 'Punishment Day',
-    image: 'https://cdn-old.brawlify.com/map/15000562.png',
-    mode: 'Last Stand',
   },
   {
     name: 'True Trail',
@@ -1240,11 +1198,6 @@ export const maps = [
     mode: 'Gem Grab',
   },
   {
-    name: 'Super City',
-    image: 'https://cdn-old.brawlify.com/map/15000269.png',
-    mode: 'Super City Rampage',
-  },
-  {
     name: 'Dark Fantasies',
     image: 'https://cdn-old.brawlify.com/map/15000391.png',
     mode: 'Solo Showdown',
@@ -1820,11 +1773,6 @@ export const maps = [
     mode: 'Duo Showdown',
   },
   {
-    name: 'Vault Defenders',
-    image: 'https://cdn-old.brawlify.com/map/15000068.png',
-    mode: 'Robo Rumble',
-  },
-  {
     name: 'Perimeter',
     image: 'https://cdn-old.brawlify.com/map/15000291.png',
     mode: 'Hot Zone',
@@ -1850,16 +1798,6 @@ export const maps = [
     mode: 'Siege',
   },
   {
-    name: 'Keep Safe',
-    image: 'https://cdn-old.brawlify.com/map/15000039.png',
-    mode: 'Robo Rumble',
-  },
-  {
-    name: 'Hunting Party',
-    image: 'https://cdn-old.brawlify.com/map/15000065.png',
-    mode: 'Big Game',
-  },
-  {
     name: 'Shoulder Bash',
     image: 'https://cdn-old.brawlify.com/map/15000253.png',
     mode: 'Brawl Ball',
@@ -1878,11 +1816,6 @@ export const maps = [
     name: 'Crated Factory',
     image: 'https://cdn-old.brawlify.com/map/15000262.png',
     mode: 'Siege',
-  },
-  {
-    name: 'Table Flip',
-    image: 'https://cdn-old.brawlify.com/map/15000066.png',
-    mode: 'Big Game',
   },
   {
     name: 'Galaxy Arena',
@@ -2235,11 +2168,6 @@ export const maps = [
     mode: 'Takedown',
   },
   {
-    name: 'Machine Zone',
-    image: 'https://cdn-old.brawlify.com/map/15000057.png',
-    mode: 'Boss Fight',
-  },
-  {
     name: 'Straight Shot',
     image: 'https://cdn-old.brawlify.com/map/15000129.png',
     mode: 'Siege',
@@ -2293,26 +2221,6 @@ export const maps = [
     name: 'Burning Sands',
     image: 'https://cdn-old.brawlify.com/map/15000150.png',
     mode: 'Bounty',
-  },
-  {
-    name: 'Team Day',
-    image: 'https://cdn-old.brawlify.com/map/15000021.png',
-    mode: 'Big Game',
-  },
-  {
-    name: 'Pachinko Park',
-    image: 'https://cdn-old.brawlify.com/map/15000027.png',
-    mode: 'Robo Rumble',
-  },
-  {
-    name: 'Steel Junction',
-    image: 'https://cdn-old.brawlify.com/map/15000029.png',
-    mode: 'Robo Rumble',
-  },
-  {
-    name: 'Chew Out',
-    image: 'https://cdn-old.brawlify.com/map/15000030.png',
-    mode: 'Big Game',
   },
   {
     name: 'Sapphire Plains',
@@ -2465,16 +2373,6 @@ export const maps = [
     mode: 'Duo Showdown',
   },
   {
-    name: 'Team Day',
-    image: 'https://cdn-old.brawlify.com/map/15000119.png',
-    mode: 'Big Game',
-  },
-  {
-    name: 'Chew Out',
-    image: 'https://cdn-old.brawlify.com/map/15000120.png',
-    mode: 'Big Game',
-  },
-  {
     name: 'Curveball',
     image: 'https://cdn-old.brawlify.com/map/15000134.png',
     mode: 'Brawl Ball',
@@ -2538,16 +2436,6 @@ export const maps = [
     name: 'Figure 8',
     image: 'https://cdn-old.brawlify.com/map/15000151.png',
     mode: 'Heist',
-  },
-  {
-    name: 'Rumble In The Jungle',
-    image: 'https://cdn-old.brawlify.com/map/15000325.png',
-    mode: 'Boss Fight',
-  },
-  {
-    name: 'Rope-A-Dope',
-    image: 'https://cdn-old.brawlify.com/map/15000326.png',
-    mode: 'Boss Fight',
   },
   {
     name: 'Conveyor Clash',
@@ -2655,33 +2543,13 @@ export const maps = [
     mode: 'Duo Showdown',
   },
   {
-    name: 'Salvation',
-    image: 'https://cdn-old.brawlify.com/map/15000564.png',
-    mode: 'Last Stand',
-  },
-  {
     name: 'Corridors',
     image: 'https://cdn-old.brawlify.com/map/15000521.png',
     mode: 'Bot Drop',
   },
   {
-    name: 'The Eliminator',
-    image: 'https://cdn-old.brawlify.com/map/15000567.png',
-    mode: 'Last Stand',
-  },
-  {
     name: 'Juhas Test Chamber',
     image: 'https://cdn-old.brawlify.com/map/15000568.png',
     mode: 'Gem Grab',
-  },
-  {
-    name: 'Dark Destiny',
-    image: 'https://cdn-old.brawlify.com/map/15000566.png',
-    mode: 'Last Stand',
-  },
-  {
-    name: 'Fried Circuits',
-    image: 'https://cdn-old.brawlify.com/map/15000565.png',
-    mode: 'Last Stand',
   },
 ];

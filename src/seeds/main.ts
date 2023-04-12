@@ -24,7 +24,13 @@ export const populate = async (
   if (tables.includes('mode')) {
     for (const mode of modes) {
       await queryRunner.query(
-        `INSERT INTO mode (name, type_id) VALUES ("${mode.name}", (SELECT id FROM type WHERE name = "${mode.type}"))`,
+        `INSERT INTO mode (name, image, isActive, type_id) VALUES ("${
+          mode.name
+        }", "${
+          mode.image
+        }", ${!!mode.isActive}, (SELECT id FROM type WHERE name = "${
+          mode.type
+        }"))`,
       );
     }
   }
@@ -32,7 +38,13 @@ export const populate = async (
   if (tables.includes('map')) {
     for (const map of maps) {
       await queryRunner.query(
-        `INSERT INTO map (name, image, mode_id) VALUES ("${map.name}", "${map.image}", (SELECT id FROM mode WHERE name = "${map.mode}"))`,
+        `INSERT INTO map (name, image, isActive, isOnPowerLeagueSeason, mode_id) VALUES ("${
+          map.name
+        }", "${
+          map.image
+        }", ${!!map.isActive}, ${!!map.isOnPowerLeagueSeason}, (SELECT id FROM mode WHERE name = "${
+          map.mode
+        }"))`,
       );
     }
   }

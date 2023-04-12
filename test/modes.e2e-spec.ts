@@ -6,10 +6,10 @@ import { mainConfig } from '../src/main.config';
 import dataSource from '../src/data-source';
 import { populate } from '../src/seeds/main';
 import { connectUser } from './utils';
-import { maps } from '../src/seeds/map';
 import { URLSearchParams } from 'url';
+import { modes } from '../src/seeds/mode';
 
-describe('Maps', () => {
+describe('Modes', () => {
   let app: INestApplication;
   let jwt;
 
@@ -25,7 +25,7 @@ describe('Maps', () => {
     await app.init();
     await dataSource.initialize();
     const queryRunner = dataSource.createQueryRunner();
-    await populate(queryRunner, ['user', 'map', 'mode']);
+    await populate(queryRunner, ['user', 'mode', 'type']);
   });
 
   afterAll(async () => {
@@ -34,129 +34,92 @@ describe('Maps', () => {
     await app.close();
   });
 
-  describe('GET /maps', () => {
+  describe('GET /modes', () => {
     it(`401 - ERROR : Not authenticated`, async () => {
-      const response = await request(app.getHttpServer()).get('/maps');
+      const response = await request(app.getHttpServer()).get('/modes');
 
       expect(response.status).toBe(401);
     });
 
-    it(`200 - SUCCESS : All maps`, async () => {
+    it(`200 - SUCCESS : All modes`, async () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
-        .get('/maps')
+        .get('/modes')
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
-      expect(response.body.length).toBe(maps.length);
+      expect(response.body.length).toBe(modes.length);
     });
 
-    it(`200 - SUCCESS : Actives maps`, async () => {
+    it(`200 - SUCCESS : Actives modes`, async () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
-        .get('/maps?isActive=true')
-        .set('Authorization', 'Bearer ' + jwt);
-
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(
-        maps.filter((map) => map.isActive).length,
-      );
-    });
-
-    it(`200 - SUCCESS : Not actives maps`, async () => {
-      jwt = await connectUser(app);
-
-      const response = await request(app.getHttpServer())
-        .get('/maps?isActive=false')
+        .get('/modes?isActive=true')
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(
-        maps.filter((map) => !map.isActive).length,
+        modes.filter((mode) => mode.isActive).length,
       );
     });
 
-    it(`200 - SUCCESS : Not correct query params isActive so all maps`, async () => {
+    it(`200 - SUCCESS : Not actives modes`, async () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
-        .get('/maps?isActive=blblblbl')
-        .set('Authorization', 'Bearer ' + jwt);
-
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(maps.length);
-    });
-
-    it(`200 - SUCCESS : On Power League season maps`, async () => {
-      jwt = await connectUser(app);
-
-      const response = await request(app.getHttpServer())
-        .get('/maps?isOnPowerLeagueSeason=true')
+        .get('/modes?isActive=false')
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(
-        maps.filter((map) => map.isOnPowerLeagueSeason).length,
+        modes.filter((mode) => !mode.isActive).length,
       );
     });
 
-    it(`200 - SUCCESS : Not on Power League season maps`, async () => {
+    it(`200 - SUCCESS : Not correct query params isActive so all modes`, async () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
-        .get('/maps?isOnPowerLeagueSeason=false')
+        .get('/modes?isActive=blblblbl')
+        .set('Authorization', 'Bearer ' + jwt);
+
+      expect(response.status).toBe(200);
+      expect(response.body.length).toBe(modes.length);
+    });
+
+    it(`200 - SUCCESS : With correct type params`, async () => {
+      jwt = await connectUser(app);
+
+      const response = await request(app.getHttpServer())
+        .get(`/modes?` + new URLSearchParams({ type: '3v3' }))
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(
-        maps.filter((map) => !map.isOnPowerLeagueSeason).length,
+        modes.filter((mode) => mode.type === '3v3').length,
       );
     });
 
-    it(`200 - SUCCESS : Not correct query params isOnPowerLeagueSeason so all maps`, async () => {
+    it(`200 - SUCCESS : Not correct query params mode so no modes`, async () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
-        .get('/maps?isOnPowerLeagueSeason=blblblbl')
-        .set('Authorization', 'Bearer ' + jwt);
-
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(maps.length);
-    });
-
-    it(`200 - SUCCESS : With correct mode params`, async () => {
-      jwt = await connectUser(app);
-
-      const response = await request(app.getHttpServer())
-        .get(`/maps?` + new URLSearchParams({ mode: 'Gem Grab' }))
-        .set('Authorization', 'Bearer ' + jwt);
-
-      expect(response.status).toBe(200);
-      expect(response.body.length).toBe(
-        maps.filter((map) => map.mode === 'Gem Grab').length,
-      );
-    });
-
-    it(`200 - SUCCESS : Not correct query params mode so no maps`, async () => {
-      jwt = await connectUser(app);
-
-      const response = await request(app.getHttpServer())
-        .get('/maps?mode=blblblbl')
+        .get('/modes?type=blblblbl')
         .set('Authorization', 'Bearer ' + jwt);
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(0);
     });
 
-    it(`200 - SUCCESS : With a correct mode and isActive`, async () => {
+    it(`200 - SUCCESS : With a correct type and isActive`, async () => {
       jwt = await connectUser(app);
 
       const response = await request(app.getHttpServer())
         .get(
-          `/maps?${new URLSearchParams({
-            mode: 'Gem Grab',
+          `/modes?${new URLSearchParams({
+            type: '3v3',
             isActive: 'true',
           })}`,
         )
@@ -164,9 +127,9 @@ describe('Maps', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.length).toBe(
-        maps
-          .filter((map) => map.mode === 'Gem Grab')
-          .filter((map) => map.isActive).length,
+        modes
+          .filter((mode) => mode.type === '3v3')
+          .filter((mode) => mode.isActive).length,
       );
     });
   });
