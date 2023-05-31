@@ -12,7 +12,7 @@ export class ModesController {
 
   @ApiOperation({ summary: 'Get a list of available modes' })
   @Get()
-  async getModes(@Query() { isActive, type }: GetModesDto): Promise<Mode[]> {
+  getModes(@Query() { isActive, type }: GetModesDto): Promise<Mode[]> {
     return this.modesService.findModes(isActive, type);
   }
 }

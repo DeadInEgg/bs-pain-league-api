@@ -30,10 +30,7 @@ export class GamesController {
 
   @ApiOperation({ summary: 'Create a game for a tracker' })
   @Post()
-  async create(
-    @Req() request,
-    @Body() createGameDto: CreateGameDto,
-  ): Promise<Game> {
+  create(@Req() request, @Body() createGameDto: CreateGameDto): Promise<Game> {
     return this.gamesService.create(createGameDto, request.user.id);
   }
 
@@ -42,7 +39,7 @@ export class GamesController {
    */
   @ApiOperation({ summary: 'Get games from Brawl Stars api' })
   @Get('/suggest/:trackerHash')
-  async findSuggest(
+  findSuggest(
     @Req() request,
     @Param('trackerHash') trackHash: string,
   ): Promise<Game[]> {
@@ -52,7 +49,7 @@ export class GamesController {
   @ApiOperation({ summary: "Get game's info" })
   @ApiNotFoundResponse({ description: 'Game not found' })
   @Get(':id')
-  async findOne(
+  findOne(
     @Req() request,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Game> {
@@ -64,7 +61,7 @@ export class GamesController {
   @ApiNoContentResponse({ description: 'Game updated successfully' })
   @HttpCode(204)
   @Patch(':id')
-  async update(
+  update(
     @Req() request,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateGameDto: UpdateGameDto,
@@ -77,10 +74,7 @@ export class GamesController {
   @ApiNoContentResponse({ description: 'Game deleted successfully' })
   @HttpCode(204)
   @Delete(':id')
-  async remove(
-    @Req() request,
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Game> {
+  remove(@Req() request, @Param('id', ParseIntPipe) id: number): Promise<Game> {
     return this.gamesService.remove(request.user.id, +id);
   }
 }

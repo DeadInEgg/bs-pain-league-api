@@ -10,7 +10,7 @@ export class MapsService {
     private mapRepository: Repository<Map>,
   ) {}
 
-  async findMaps(
+  findMaps(
     isActive?: boolean,
     isOnPowerLeagueSeason?: boolean,
     mode?: string,
