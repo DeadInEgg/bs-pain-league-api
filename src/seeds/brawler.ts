@@ -190,54 +190,54 @@ export const brawlers = [
   },
   {
     name: 'Crow',
-    image: 'https://cdn-old.brawlify.com/brawler/Crow.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Crow.png',
   },
   {
     name: 'Mortis',
-    image: 'https://cdn-old.brawlify.com/brawler/Mortis.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Mortis.png',
   },
   {
     name: 'El Primo',
-    image: 'https://cdn-old.brawlify.com/brawler/El-Primo.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/El-Primo.png',
   },
   {
     name: 'Dynamike',
-    image: 'https://cdn-old.brawlify.com/brawler/Dynamike.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Dynamike.png',
   },
   {
     name: 'Nita',
-    image: 'https://cdn-old.brawlify.com/brawler/Nita.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Nita.png',
   },
   {
     name: 'Jessie',
-    image: 'https://cdn-old.brawlify.com/brawler/Jessie.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Jessie.png',
   },
   {
     name: 'Barley',
-    image: 'https://cdn-old.brawlify.com/brawler/Barley.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Barley.png',
   },
   {
     name: 'Spike',
-    image: 'https://cdn-old.brawlify.com/brawler/Spike.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Spike.png',
   },
   {
     name: 'Rico',
-    image: 'https://cdn-old.brawlify.com/brawler/Rico.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Rico.png',
   },
   {
     name: 'Brock',
-    image: 'https://cdn-old.brawlify.com/brawler/Brock.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Brock.png',
   },
   {
     name: 'Bull',
-    image: 'https://cdn-old.brawlify.com/brawler/Bull.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Bull.png',
   },
   {
     name: 'Colt',
-    image: 'https://cdn-old.brawlify.com/brawler/Colt.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Colt.png',
   },
   {
     name: 'Shelly',
-    image: 'https://cdn-old.brawlify.com/brawler/Shelly.png',
+    image: 'https://cdn-old.brawlify.com/brawler-bs/Shelly.png',
   },
 ];
