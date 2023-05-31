@@ -8,7 +8,6 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { Game } from './entities/game.entity';
 import { Map } from './entities/map.entity';
-import { Mode } from './entities/mode.entity';
 import { FightersService } from './fighters.service';
 import { Fighter } from './entities/fighter.entity';
 
@@ -24,28 +23,23 @@ export class GamesService {
 
     @InjectRepository(Map)
     private mapsRepository: Repository<Map>,
-
-    @InjectRepository(Mode)
-    private modesRepository: Repository<Mode>,
   ) {}
 
   async parseOnGames(response: any): Promise<Game[]> {
     const games: Game[] = [];
 
-    await Promise.all(
-      response.items.map(async (item) => {
-        const game = new Game();
+    for (const item of response.items) {
+      const game = new Game();
 
-        game.map = await this.mapsRepository.findOneBy({
-          name: item.event.map,
-        });
-        game.result = item.battle.result;
+      game.map = await this.mapsRepository.findOneBy({
+        name: item.event.map,
+      });
+      game.result = item.battle.result;
 
-        if (game.map) {
-          games.push(game);
-        }
-      }),
-    );
+      if (game.map) {
+        games.push(game);
+      }
+    }
 
     return games;
   }
@@ -79,7 +73,7 @@ export class GamesService {
     });
   }
 
-  async findOneByIdWithTracker(gameId: number): Promise<Game> {
+  findOneByIdWithTracker(gameId: number): Promise<Game> {
     return this.gamesRepository.findOne({
       where: {
         id: gameId,

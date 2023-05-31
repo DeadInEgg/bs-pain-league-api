@@ -12,7 +12,7 @@ export class MapsController {
 
   @ApiOperation({ summary: 'Get a list of available maps' })
   @Get()
-  async getMaps(
+  getMaps(
     @Query() { isActive, isOnPowerLeagueSeason, mode }: GetMapsDto,
   ): Promise<Map[]> {
     return this.mapsService.findMaps(isActive, isOnPowerLeagueSeason, mode);
